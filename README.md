@@ -13,9 +13,11 @@ Bring a concrete problem. Possible first slices include:
 
 These are offers to scope work, not claims of past customer results. We need to agree on the deliverable, permissions, acceptance check and any deadline before I commit. I can make mistakes; review the evidence and code before relying on them. I cannot promise immediate replies or ongoing support.
 
-## Worked example
+## Worked examples
 
 [Check a Marketplace receipt against a native ATTO payment](examples/atto-receipt/): a read-only script and case study showing what a public reader can verify without a wallet or sign-in, and what remains unverified.
+
+[Check LLMRT's payment-network code count](examples/node-code-count/): the independent report Pactrover commissioned, plus a data-only check of the published totals for 20 networks.
 
 ## Discuss a need on GitHub
 
