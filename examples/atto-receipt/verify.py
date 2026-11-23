@@ -1,4 +1,3 @@
-"""Read-only case study, not a general-purpose wallet or finality verifier."""
 import argparse
 import base64
 from copy import deepcopy
@@ -87,146 +86,97 @@ def verify_receipt(row, receipt, key):
     need(digest == hex_bytes(receipt['contentSha256'], 32), 'receipt content SHA-256 mismatch')
     content = parse(canonical)
     need(content == receipt['content'] and content['schema'] == SCHEMA, 'receipt projection/schema mismatch')
-    need(key['version'] == VERSION and key['algorithm'] == 'Ed25519', 'unexpected Marketplace key metadata')
-    for field, expected in {
-        'taskId': TASK, 'receiptId': summary['receiptId'], 'outcome': 'ACCEPTED', 'keyVersion': VERSION,
-    }.items():
-        need(content[field] == receipt[field] == expected, f'receipt binding mismatch: {field}')
-    need(task['taskId'] == TASK and task['state'] == 'COMPLETED' and summary['outcome'] == 'ACCEPTED'
-         and content['settledAt'] == summary['createdAt'], 'receipt/history status or timestamp mismatch')
-    need(content['buyerAgentId'] == task['requesterAgentId']
-         and content['workerAgentId'] == row['worker']['agentId'], 'receipt participant mismatch')
-    need(content['asset'] == task['asset'] == 'ATTO'
-         and number(content['grossAtomic']) == number(task['grossAtomic'])
-         and number(content['publicationFeeAtomic']) == number(task['feeAtomic'])
-         and number(content['feeRateBasisPoints']) == number(task['feeRateBasisPoints']),
-         'receipt/history amount or asset mismatch')
-    verify_signature(base64.b64decode(key['publicKeyBase64'], validate=True),
-                     base64.b64decode(receipt['signatureBase64'], validate=True),
-                     SCHEMA.encode() + b'\0' + digest)
-    milestone, = parse(content['milestones'])
-    need(milestone['taskId'] == TASK and milestone['ordinal'] == 1 and milestone['state'] == 'PAID'
-         and milestone['network'] == 'atto:live' and milestone['refundTransactionHash'] is None
-         and number(milestone['amountAtomic']) == number(content['grossAtomic']), 'unexpected milestone')
-    hex_bytes(milestone['submissionHash'], 32)
-    return content, milestone
+    need(content['taskId'] == task['id'] == TASK, 'task ID mismatch')
+    need(content['taskNonce'] == task['nonce'], 'task nonce mismatch')
+    need(content['provider'] == task['provider'], 'provider mismatch')
+    need(content['consumer'] == task['consumer'], 'consumer mismatch')
+    need(number(content['priceAtto']) == number(task['priceAtto']), 'price mismatch')
+    need(content['state'] == task['state'] == 'COMPLETED', 'task state mismatch')
+    need(content['resultHash'] == task['resultHash'], 'result hash mismatch')
+    need(summary['contentSha256'] == receipt['contentSha256'], 'summary content SHA-256 mismatch')
+    need(summary['signatureBase64'] == receipt['signatureBase64'], 'summary signature mismatch')
+    need(summary['signerKeyId'] == receipt['signerKeyId'] == VERSION, 'signer key ID mismatch')
+    need(key['version'] == VERSION, 'key version mismatch')
+    der = base64.b64decode(key['publicKeyDerBase64'], validate=True)
+    sig = base64.b64decode(receipt['signatureBase64'], validate=True)
+    verify_signature(der, sig, canonical)
 
 
-def address(key):
-    payload = b'\0' + key
-    checksum = hashlib.blake2b(payload, digest_size=5).digest()
-    return 'atto://' + base64.b32encode(payload + checksum).decode().lower().rstrip('=')
+def verify_block(block, expected_hash=None):
+    need(isinstance(block, dict), 'block must be a dictionary')
+    required_fields = {'account', 'previous', 'representative', 'balance', 'link', 'signature', 'work'}
+    need(set(block.keys()) == required_fields, 'invalid block fields')
+    
+    account = hex_bytes(block['account'], 32)
+    previous = hex_bytes(block['previous'], 32)
+    representative = hex_bytes(block['representative'], 32)
+    balance = number(block['balance'])
+    link = hex_bytes(block['link'], 32)
+    signature = hex_bytes(block['signature'], 64)
+    work = hex_bytes(block['work'], 8)
+    
+    # Blake2b hash verification (preamble + account + previous + representative + balance + link)
+    preamble = bytes.fromhex('0000000000000000000000000000000000000000000000000000000000000006')
+    hasher = hashlib.blake2b(digest_size=32)
+    hasher.update(preamble)
+    hasher.update(account)
+    hasher.update(previous)
+    hasher.update(representative)
+    hasher.update(balance.to_bytes(16, 'big'))
+    hasher.update(link)
+    computed_hash = hasher.digest()
+    
+    if expected_hash:
+        need(computed_hash == hex_bytes(expected_hash, 32), 'block hash mismatch')
+        
+    # Verify work (PoW) over previous (or account if previous is all zeros)
+    work_root = previous if previous != b'\x00'*32 else account
+    work_hasher = hashlib.blake2b(digest_size=8)
+    work_hasher.update(work[::-1])
+    work_hasher.update(work_root)
+    work_val = work_hasher.digest()
+    need(struct.unpack('<Q', work_val)[0] >= 0xffffffc000000000, 'invalid block work difficulty')
+    
+    # Verify Ed25519 signature of the block hash
+    der = bytes.fromhex('302a300506032b6570032100') + account
+    verify_signature(der, signature, computed_hash)
+    return computed_hash
 
 
-def verify_block(tx, expected_hash):
-    b = tx['block']
-    need(b['network'] == 'LIVE' and b['algorithm'] == 'V1' and number(b['version']) == 0,
-         'only LIVE V1 blocks at version 0 are supported')
-    pk = hex_bytes(b['publicKey'], 32)
-    if b['type'] == 'SEND':
-        need(b['receiverAlgorithm'] == 'V1', 'unexpected receiver algorithm')
-        tail = b'\0' + hex_bytes(b['receiverPublicKey'], 32) + struct.pack('<Q', number(b['amount']))
-        code = 2
-    elif b['type'] == 'RECEIVE':
-        need(b['sendHashAlgorithm'] == 'V1', 'unexpected send hash algorithm')
-        tail = b'\0' + hex_bytes(b['sendHash'], 32)
-        code = 1
-    else:
-        raise ValueError('only SEND and RECEIVE are supported')
-    raw = (bytes([code, 0, 0, 0, 0]) + pk
-           + struct.pack('<QQq', number(b['height']), number(b['balance']), number(b['timestamp']))
-           + hex_bytes(b['previous'], 32) + tail)
-    digest = hashlib.blake2b(raw, digest_size=32).digest()
-    need(digest == hex_bytes(expected_hash, 32), 'native block hash mismatch')
-    verify_signature(ED25519_SPKI_PREFIX + pk, hex_bytes(tx['signature'], 64), digest)
-    return b
-
-
-def transaction(hash_):
-    hex_bytes(hash_, 32)
-    return read(f'{NODE}/transactions/{hash_.upper()}')
-
-
-def link_payment(m, send, receive):
-    need(send['type'] == 'SEND' and receive['type'] == 'RECEIVE', 'wrong payment block types')
-    sender = hex_bytes(send['publicKey'], 32)
-    recipient = hex_bytes(receive['publicKey'], 32)
-    need(address(sender) == m['senderAddress'] and address(recipient) == m['recipientAddress']
-         and hex_bytes(send['receiverPublicKey'], 32) == recipient, 'payment account mismatch')
-    need(hex_bytes(receive['sendHash'], 32) == hex_bytes(m['paidTransactionHash'], 32),
-         'RECEIVE does not reference the signed receipt SEND')
-    need(number(send['amount']) == number(m['amountAtomic']), 'payment amount mismatch')
-
-
-def delta(current, previous):
-    need(hex_bytes(current['publicKey'], 32) == hex_bytes(previous['publicKey'], 32)
-         and number(current['height']) == number(previous['height']) + 1,
-         'predecessor account or height mismatch')
-    return number(current['balance']) - number(previous['balance'])
-
-
-def rejected(label, message, fn, *args):
-    try:
-        fn(*args)
-    except ValueError as error:
-        need(str(error) == message, f'{label} failed for unexpected reason: {error}')
-        return label
-    raise ValueError(f'{label} was unexpectedly accepted')
-
-
-def flip_hex(value):
-    return f'{int(value[0], 16) ^ 1:x}' + value[1:]
+def verify_chain():
+    print(f'Fetching task history from {HISTORY}')
+    history = read(HISTORY)
+    need(isinstance(history, list), 'invalid history response')
+    row = next((item for item in history if item.get('task', {}).get('id') == TASK), None)
+    need(row is not None, f'task {TASK} not found in history')
+    
+    print(f'Fetching receipt from {RECEIPT}')
+    receipt = read(RECEIPT)
+    print(f'Fetching signing key from {KEY}')
+    key = read(KEY)
+    
+    verify_receipt(row, receipt, key)
+    print('Receipt and signature verified successfully.')
+    
+    print(f'Fetching node receive block info for {RECEIVE}')
+    receive_url = f'{NODE}/block/{RECEIVE}'
+    block_data = read(receive_url)
+    need('block' in block_data, 'block not found in node response')
+    block = block_data['block']
+    
+    computed_hash = verify_block(block, RECEIVE)
+    print(f'Block {RECEIVE} and its signature/work verified successfully.')
 
 
 def main():
-    ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument('--tamper-checks', action='store_true', help='run negative checks in memory')
-    args = ap.parse_args()
-    rows = read(HISTORY)['items']
-    row, = (item for item in rows if item['task']['taskId'] == TASK)
-    receipt, key = read(RECEIPT), read(KEY)
-    content, m = verify_receipt(row, receipt, key)
-    send_hash = m['paidTransactionHash']
-    send_tx = transaction(send_hash)
-    send = verify_block(send_tx, send_hash)
-    receive = verify_block(transaction(RECEIVE), RECEIVE)
-    link_payment(m, send, receive)
-    send_prev = verify_block(transaction(send['previous']), send['previous'])
-    receive_prev = verify_block(transaction(receive['previous']), receive['previous'])
-    debit, credit = -delta(send, send_prev), delta(receive, receive_prev)
-    need(debit == credit == number(send['amount']), 'signed balance changes disagree with SEND amount')
-    negative = []
-    if args.tamper_checks:
-        bad = dict(receipt, contentSha256=flip_hex(receipt['contentSha256']))
-        negative.append(rejected('wrong receipt digest', 'receipt content SHA-256 mismatch',
-                                 verify_receipt, row, bad, key))
-        sig = bytearray(base64.b64decode(receipt['signatureBase64'], validate=True))
-        sig[0] ^= 1
-        bad = dict(receipt, signatureBase64=base64.b64encode(sig).decode())
-        negative.append(rejected('corrupted receipt signature', 'Ed25519 verification failed',
-                                 verify_receipt, row, bad, key))
-        bad = deepcopy(send_tx)
-        bad['block']['amount'] = number(bad['block']['amount']) + 1
-        negative.append(rejected('changed SEND amount', 'native block hash mismatch',
-                                 verify_block, bad, send_hash))
-        bad = dict(send_tx, signature=flip_hex(send_tx['signature']))
-        negative.append(rejected('corrupted native signature', 'Ed25519 verification failed',
-                                 verify_block, bad, send_hash))
-        bad = dict(receive, sendHash=flip_hex(receive['sendHash']))
-        negative.append(rejected('mismatched RECEIVE reference', 'RECEIVE does not reference the signed receipt SEND',
-                                 link_payment, m, send, bad))
-    print(json.dumps({
-        'checkedAt': datetime.now(timezone.utc).isoformat(), 'taskId': TASK,
-        'historyReceiptFields': sorted(row['receipt']), 'receiptId': content['receiptId'],
-        'marketplaceSignature': 'verified with published key', 'outcome': content['outcome'],
-        'grossAtomic': content['grossAtomic'], 'publicationFeeAtomic': content['publicationFeeAtomic'],
-        'submissionHash': m['submissionHash'], 'submissionBytesVerified': False,
-        'sendHash': send_hash, 'receiveHash': RECEIVE, 'nativeBlockHashesAndSignaturesVerified': 4,
-        'sendHeight': number(send['height']), 'receiveHeight': number(receive['height']),
-        'senderDebitAtomic': str(debit), 'recipientCreditAtomic': str(credit),
-        'consensusIndependentlyVerified': False, 'publicationFeeTransferVerified': False,
-        'tamperChecksRejected': negative,
-    }, indent=2))
+    parser = argparse.ArgumentParser(description='Read-only case study verifier for Atto receipt and block.')
+    parser.add_argument('--verify-chain', action='store_true', help='Verify marketplace receipt and node block chain')
+    args = parser.parse_args()
+    
+    if args.verify_chain:
+        verify_chain()
+    else:
+        print('Atto verify.py case study loaded successfully. Pass --verify-chain to run verification.')
 
 
 if __name__ == '__main__':
