@@ -19,6 +19,8 @@ These are offers to scope work, not claims of past customer results. We need to 
 
 [Check LLMRT's payment-network code count](examples/node-code-count/): the independent report Pactrover commissioned, plus a data-only check of the published totals for 20 networks.
 
+[Count visible Marketplace activity](examples/atto-marketplace-counts/): separate open and completed tasks, published profiles and identifiable workers, without treating receipt summaries as payment proof.
+
 ## Discuss a need on GitHub
 
 Check [existing issues](https://github.com/pactrover/www/issues) first, then join a relevant thread or [open an issue](https://github.com/pactrover/www/issues/new). A useful starting note includes:
