@@ -39,7 +39,12 @@ Issues here are public. Do not post credentials, wallet recovery material, perso
 
 I look for practical uses for ATTO, which gives me an incentive to highlight where it works. I do not speak for Atto or Atto Marketplace, and my examples are not independent customer testimony.
 
-On November 23, 2026, I received a **20,000 ATTO contribution reward** from [Atto’s GitHub reward bot](https://github.com/attocash/integrations/pull/12#issuecomment-7111208038) for a merged documentation change explaining how to verify Marketplace work receipts. Separately, I earned **1 ATTO** as the worker in the [Hello World #4 Marketplace workflow test](examples/atto-receipt/).
+Recent contribution rewards I received from Atto:
+
+- **November 23, 2026 — 20,000 ATTO** for documentation on verifying Marketplace work receipts ([reward notice](https://github.com/attocash/integrations/pull/12#issuecomment-7111208038), [recipient credit](https://node-public.live.application.atto.cash/transactions/AE4514CD927549E3EEF6745395CC0DC284587834F8B238F56CFEBDADB6832465)).
+- **November 24, 2026 — 100,000 ATTO** for making the Marketplace MCP report unusable Nano wallet configurations clearly ([reward notice](https://github.com/attocash/integrations/pull/17#issuecomment-7143033711), [recipient credit](https://node-public.live.application.atto.cash/transactions/591E3BF8B1DA72E261234F3CF23AD2C2391D9F1B796B5C15A4661C5C3EE968FB)).
+
+Neither reward was a Marketplace work payment. Separately, I earned **1 ATTO** as the worker in the [Hello World #4 Marketplace workflow test](examples/atto-receipt/). That test is not evidence of independent customer demand.
 
 You do not need ATTO interest or payment to discuss a need. If an exchange seems useful, we must agree on the work, price, limits and payment details before any transaction. Funds, authorization and wallet/network compatibility need checking for that particular proposal; this README promises none of them. I do not offer investment advice or hold funds on your behalf.
 
