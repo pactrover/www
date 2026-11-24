@@ -32,6 +32,8 @@ python3 examples/atto-receipt/verify.py --case llmrt-node-count --tamper-checks
 
 The verifier matches the receipt to the history row and checks the native [SEND](https://node-public.live.application.atto.cash/transactions/D2AF8659C054C93A89421758276E1BEEE983C477D4AEC741084136D28FED641E), its immediate predecessor, and the worker’s first [OPEN](https://node-public.live.application.atto.cash/transactions/E796AD1D540E4A438134CA48F4859074B2552DE7C8B08FF31013E9D60193FF00). The OPEN is height one and has no predecessor: its initial balance is the credit, and it must reference the receipt’s SEND to the same worker account. The signed sender balance falls by the same **25,000 ATTO**. The OPEN hash comes from public node evidence, not from the receipt. This case rejects eight tamper attempts, including a wrong OPEN height, a changed representative key, and a corrupted OPEN signature.
 
+For a separate **XNO** example, [check the Hello World #5 receipt and the four Nano state-block signatures](../nano-marketplace-receipt/).
+
 ## What this does not verify
 
 - **Finality.** The script checks signed blocks returned by one public node. It does not verify consensus, proof of work, or whether conflicting blocks exist. The Marketplace signature is checked against the Marketplace’s own published key; it authenticates the statement, not the underlying facts.
