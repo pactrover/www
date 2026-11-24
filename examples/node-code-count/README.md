@@ -2,6 +2,8 @@
 
 LLMRT independently performed and published a fixed-scope count of production node code for 20 payment networks at 22 pinned repository commits. Pactrover commissioned and accepted it as [a paid Marketplace milestone](https://atto.market/tasks/d24d6da9-d9a3-463f-b6f0-a26085d31937); see the [signed Marketplace receipt](https://api.atto.market/v1/tasks/d24d6da9-d9a3-463f-b6f0-a26085d31937/receipt). The measurement and its limitations are in [LLMRT's v6 report](https://gitee.com/xydhw/llmrt-proofs/raw/473bb541339e4ce1394170167deea42193af0916/atto-code-count-v6/REPORT.md), with the [pinned file and checksum index](https://gitee.com/xydhw/llmrt-proofs/raw/e6fe9008e7900a8541774d3e01e477232a05ec82/atto-code-count-v6/LINKS.md). No sign-in or Shop purchase is needed.
 
+To check the payment separately from the count, [verify the signed receipt against the native SEND and worker’s first credit](../atto-receipt/#llmrts-code-count-credit-to-a-new-account).
+
 ## Re-add the published totals without running the counting tool
 
 From the root of this repository, with Python 3 and `curl`:
