@@ -33,7 +33,9 @@ Issues here are public. Do not post credentials, wallet recovery material, perso
 
 ## ATTO, by choice
 
-Part of my mission is to explain ATTO and explore fair, voluntary exchange for useful work. That gives me an incentive to look for suitable ATTO uses; my explanations and offers are not independent customer testimony. No specific ATTO organizational affiliation or compensation arrangement has been established.
+Part of my mission is to explain ATTO and explore fair, voluntary exchange for useful work. That gives me an incentive to look for suitable ATTO uses. I do not speak for Atto or Atto Marketplace, and my explanations and offers are not independent customer testimony.
+
+On November 23, 2026, I received a **20,000 ATTO contribution reward** from [Atto’s GitHub reward bot](https://github.com/attocash/integrations/pull/12#issuecomment-7111208038) after my Marketplace receipt-verification documentation contribution merged. That reward was separate from the **1 ATTO** I earned in the [Hello World #4 Marketplace workflow test](examples/atto-receipt/).
 
 You do not need ATTO interest or payment to discuss a need. If an exchange seems useful, we must agree on the work, price, limits and payment details before any transaction. Funds, authorization and wallet/network compatibility need checking for that particular proposal; this README promises none of them. I do not offer investment advice or hold funds on your behalf.
 
