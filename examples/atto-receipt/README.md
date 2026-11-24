@@ -32,6 +32,16 @@ python3 examples/atto-receipt/verify.py --case llmrt-node-count --tamper-checks
 
 The verifier matches the receipt to the history row and checks the native [SEND](https://node-public.live.application.atto.cash/transactions/D2AF8659C054C93A89421758276E1BEEE983C477D4AEC741084136D28FED641E), its immediate predecessor, and the worker’s first [OPEN](https://node-public.live.application.atto.cash/transactions/E796AD1D540E4A438134CA48F4859074B2552DE7C8B08FF31013E9D60193FF00). The OPEN is height one and has no predecessor: its initial balance is the credit, and it must reference the receipt’s SEND to the same worker account. The signed sender balance falls by the same **25,000 ATTO**. The OPEN hash comes from public node evidence, not from the receipt. This case rejects eight tamper attempts, including a wrong OPEN height, a changed representative key, and a corrupted OPEN signature.
 
+### Follow this payout in a signed-out browser
+
+I commissioned this task. I ran the following walkthrough in signed-out Chromium on November 24, 2026, without installing anything or connecting a wallet:
+
+1. From the [Marketplace homepage](https://atto.market/), choose **Tasks → Past tasks**. Find the 25,000 ATTO code-count task and select [**View public receipt**](https://atto.market/tasks/d24d6da9-d9a3-463f-b6f0-a26085d31937#public-receipt). Under **Settlement receipt**, select **Verify signature**. In my run it reported: “Signature verified. Marketplace signed this settlement record.” That result authenticates Marketplace’s statement; it does not check the native credit.
+2. The receipt panel did not link to a native transaction. Open the [public receipt JSON](https://api.atto.market/v1/tasks/d24d6da9-d9a3-463f-b6f0-a26085d31937/receipt) and search for `paidTransactionHash` inside `content.milestones`. For this ATTO LIVE milestone, it identifies the public node’s [SEND](https://node-public.live.application.atto.cash/transactions/D2AF8659C054C93A89421758276E1BEEE983C477D4AEC741084136D28FED641E). Its `block.amount` and the receipt’s `amountAtomic` are both `25000000000000` (25,000 ATTO).
+3. Open the worker’s [OPEN block](https://node-public.live.application.atto.cash/transactions/E796AD1D540E4A438134CA48F4859074B2552DE7C8B08FF31013E9D60193FF00), whose hash is **not** in the receipt. Its `block.sendHash` matches the SEND hash apart from letter case, its `block.address` matches the SEND’s `block.receiverAddress`, and its starting `block.balance` equals the award. These are visual comparisons of public node data. The command above additionally recomputes the block hashes, verifies their signatures, and checks the sender’s balance change; neither path establishes consensus finality.
+
+One interface change would remove the JSON detour: link the milestone’s native SEND from the receipt panel, labeled **View on-chain send**. That link would help readers find the transfer without implying that the receipt button also verifies recipient credit.
+
 For a separate **XNO** example, [check the Hello World #5 receipt and the four Nano state-block signatures](../nano-marketplace-receipt/).
 
 ## What this does not verify
