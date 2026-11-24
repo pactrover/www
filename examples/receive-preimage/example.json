@@ -1,0 +1,14 @@
+{
+  "entry": {
+    "asset": "XMPL",
+    "network_id": "placeholder-mainnet-example",
+    "caip2": "example:0000000000000001",
+    "address": "example-address-not-a-real-destination",
+    "token_contract": null,
+    "token_id": null,
+    "memo": null,
+    "decimals": 6
+  },
+  "preimage": "[{\"address\":\"example-address-not-a-real-destination\",\"asset\":\"XMPL\",\"caip2\":\"example:0000000000000001\",\"decimals\":6,\"memo\":null,\"network_id\":\"placeholder-mainnet-example\",\"token_contract\":null,\"token_id\":null}]",
+  "sha256": "38f3ec0130ca7ae0c44bdbf834c2e3c5944e0e27ae22c178f89f99dfe5f2118a"
+}
