@@ -1,0 +1,156 @@
+{
+  "schema": "pactrover-public-payout-snapshot-v1",
+  "startedAtUtc": "2026-11-24T08:05:45.220057+00:00",
+  "finishedAtUtc": "2026-11-24T08:05:48.820111+00:00",
+  "source": "https://api.atto.market/v1/discovery/task-history",
+  "pageSize": 24,
+  "pagesRead": 1,
+  "paginationExhausted": true,
+  "platformTotalKnown": false,
+  "independentlyVerifiedConsensus": false,
+  "payoutAttemptCount": null,
+  "visibleRowsByState": {
+    "CANCELLED": 1,
+    "COMPLETED": 5
+  },
+  "verifiedWorkerCreditsByAsset": {
+    "ATTO": {
+      "verifiedCredits": 2,
+      "creditSumAtomic": "25001000000000",
+      "atomicUnitsPerUnit": "1000000000"
+    },
+    "XNO": {
+      "verifiedCredits": 1,
+      "creditSumAtomic": "125000000000000000000000000000",
+      "atomicUnitsPerUnit": "1000000000000000000000000000000"
+    }
+  },
+  "rows": [
+    {
+      "taskId": "effc7711-e66c-4dde-852a-d24dd190c73d",
+      "title": "40,000 ATTO — Independently count production node code for 20 payment networks",
+      "state": "CANCELLED",
+      "asset": "ATTO",
+      "closedAt": "2026-11-18T22:20:44.709247Z",
+      "workerVisible": false,
+      "receiptSummary": null,
+      "receiptUrl": null,
+      "receiptProbeHttpStatus": null,
+      "payment": null,
+      "evidenceStatus": "not_a_completed_row"
+    },
+    {
+      "taskId": "a603eb38-df75-40c1-9821-b5f664bd5099",
+      "title": "Hello World #4",
+      "state": "COMPLETED",
+      "asset": "ATTO",
+      "closedAt": "2026-11-21T22:23:43.949085Z",
+      "workerVisible": true,
+      "receiptSummary": {
+        "receiptId": "a3883ca3-11b9-4b56-954d-e9d23686632b",
+        "outcome": "ACCEPTED",
+        "createdAt": "2026-11-21T22:23:43.965953Z"
+      },
+      "receiptUrl": "https://api.atto.market/v1/tasks/a603eb38-df75-40c1-9821-b5f664bd5099/receipt",
+      "receiptProbeHttpStatus": null,
+      "payment": {
+        "case": "test",
+        "checkedAtUtc": "2026-11-24T08:05:47.117205+00:00",
+        "sendHash": "5913d58d17e8bae321b26f2932d9ae207791f13504fd45c5e2d65ab407d427d0",
+        "senderDebitAtomic": "1000000000",
+        "workerCreditAtomic": "1000000000",
+        "creditType": "RECEIVE",
+        "creditHash": "D14AD8417EDB259893758CE2250D25748FF9D71D2772A208ECA5DE11FDAB3BF0",
+        "nativeBlockSignaturesChecked": 4,
+        "tamperChecksRejected": 5,
+        "rpcEndpointsReportingConfirmation": null
+      },
+      "evidenceStatus": "signed_receipt_and_native_blocks_verified"
+    },
+    {
+      "taskId": "d24d6da9-d9a3-463f-b6f0-a26085d31937",
+      "title": "25,000 ATTO — Count production node code for 20 payment networks (repositories provided)",
+      "state": "COMPLETED",
+      "asset": "ATTO",
+      "closedAt": "2026-11-23T06:08:19.845362Z",
+      "workerVisible": true,
+      "receiptSummary": {
+        "receiptId": "112bb55f-cefa-40bc-a9aa-cdb11b446eb6",
+        "outcome": "ACCEPTED",
+        "createdAt": "2026-11-23T06:08:19.864955Z"
+      },
+      "receiptUrl": "https://api.atto.market/v1/tasks/d24d6da9-d9a3-463f-b6f0-a26085d31937/receipt",
+      "receiptProbeHttpStatus": null,
+      "payment": {
+        "case": "pactrover_commission",
+        "checkedAtUtc": "2026-11-24T08:05:47.857602+00:00",
+        "sendHash": "d2af8659c054c93a89421758276e1beee983c477d4aec741084136d28fed641e",
+        "senderDebitAtomic": "25000000000000",
+        "workerCreditAtomic": "25000000000000",
+        "creditType": "OPEN",
+        "creditHash": "E796AD1D540E4A438134CA48F4859074B2552DE7C8B08FF31013E9D60193FF00",
+        "nativeBlockSignaturesChecked": 3,
+        "tamperChecksRejected": 8,
+        "rpcEndpointsReportingConfirmation": null
+      },
+      "evidenceStatus": "signed_receipt_and_native_blocks_verified"
+    },
+    {
+      "taskId": "47602b24-26d7-455f-9ec5-b1941645bcff",
+      "title": "Hello World #2",
+      "state": "COMPLETED",
+      "asset": "ATTO",
+      "closedAt": "2026-11-23T13:59:55.722155Z",
+      "workerVisible": false,
+      "receiptSummary": null,
+      "receiptUrl": "https://api.atto.market/v1/tasks/47602b24-26d7-455f-9ec5-b1941645bcff/receipt",
+      "receiptProbeHttpStatus": 404,
+      "payment": null,
+      "evidenceStatus": "no_public_summary_receipt_404"
+    },
+    {
+      "taskId": "c0976786-3c64-42ff-ad93-fcc9ec4245f8",
+      "title": "Hello World #3",
+      "state": "COMPLETED",
+      "asset": "ATTO",
+      "closedAt": "2026-11-23T14:01:46.610566Z",
+      "workerVisible": false,
+      "receiptSummary": null,
+      "receiptUrl": "https://api.atto.market/v1/tasks/c0976786-3c64-42ff-ad93-fcc9ec4245f8/receipt",
+      "receiptProbeHttpStatus": 404,
+      "payment": null,
+      "evidenceStatus": "no_public_summary_receipt_404"
+    },
+    {
+      "taskId": "e61c0cc0-641d-4414-ae76-9239dceff016",
+      "title": "Hello World #5 (XNO)",
+      "state": "COMPLETED",
+      "asset": "XNO",
+      "closedAt": "2026-11-23T19:00:03.220583Z",
+      "workerVisible": true,
+      "receiptSummary": {
+        "receiptId": "2b228ecb-afdb-4291-b461-99dba1212fed",
+        "outcome": "ACCEPTED",
+        "createdAt": "2026-11-23T19:00:03.243528Z"
+      },
+      "receiptUrl": "https://api.atto.market/v1/tasks/e61c0cc0-641d-4414-ae76-9239dceff016/receipt",
+      "receiptProbeHttpStatus": null,
+      "payment": {
+        "case": "test",
+        "checkedAtUtc": "2026-11-24T08:05:48.804003+00:00",
+        "sendHash": "46A52556441A42270EFFF7FFA7829A0A3A92AC41305199DE3AF8C5A8E65F1780",
+        "senderDebitAtomic": "125000000000000000000000000000",
+        "workerCreditAtomic": "125000000000000000000000000000",
+        "creditType": "RECEIVE",
+        "creditHash": "E50C8EEFDD60CCD4F931D2028F228AC29FEA7CB1C3B8308C922EDB4994ED43F1",
+        "nativeBlockSignaturesChecked": 4,
+        "tamperChecksRejected": 7,
+        "rpcEndpointsReportingConfirmation": [
+          "https://rpc.nano.to",
+          "https://rpc.nano-gpt.com"
+        ]
+      },
+      "evidenceStatus": "signed_receipt_and_native_blocks_verified"
+    }
+  ]
+}
