@@ -28,6 +28,9 @@ CASES = {
 }
 VERSION = 'marketplace-live-v1'
 KEY = f'{API}/v1/receipts/keys/{VERSION}'
+# SHA-256 of the published marketplace-live-v1 DER key, observed 2026-11-24.
+OFFLINE_KEY_SHA256 = '2ae2560719df3f6c3a0f4ee74766ea4d14283ac674a321bde16359ecad03ce45'
+EVIDENCE_SCHEMA = 'pactrover-atto-receipt-evidence-v1'
 SCHEMA = 'marketplace-work-receipt-v3'
 ED25519_SPKI_PREFIX = bytes.fromhex('302a300506032b6570032100')
 
@@ -57,6 +60,24 @@ def read(url):
         payload = response.read(512_001)
     need(len(payload) <= 512_000, 'oversized response')
     return parse(payload)
+
+
+def offline_reader(path):
+    with path.open('rb') as stream:
+        payload = stream.read(512_001)
+    need(len(payload) <= 512_000, 'oversized evidence bundle')
+    bundle = parse(payload)
+    need(bundle['schema'] == EVIDENCE_SCHEMA, 'unknown evidence schema')
+    responses = bundle['responses']
+    need(isinstance(responses, dict), 'offline evidence responses must be an object')
+
+    def load(url):
+        need(url in responses, f'missing offline evidence for {url}')
+        return responses[url]
+
+    key = base64.b64decode(load(KEY)['publicKeyBase64'], validate=True)
+    need(hashlib.sha256(key).hexdigest() == OFFLINE_KEY_SHA256, 'offline Marketplace key pin mismatch')
+    return load
 
 
 def hex_bytes(value, size):
@@ -160,9 +181,9 @@ def verify_block(tx, expected_hash):
     return b
 
 
-def transaction(hash_):
+def transaction(hash_, load=read):
     hex_bytes(hash_, 32)
-    return read(f'{NODE}/transactions/{hash_.upper()}')
+    return load(f'{NODE}/transactions/{hash_.upper()}')
 
 
 def link_payment(m, send, credit, credit_type):
@@ -200,26 +221,28 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--case', choices=CASES, default='hello-world', help='public example (default: %(default)s)')
     ap.add_argument('--tamper-checks', action='store_true', help='run negative checks in memory')
+    ap.add_argument('--evidence-file', type=Path, help='replay stored responses; never fetch missing entries')
     args = ap.parse_args()
+    load = read if args.evidence_file is None else offline_reader(args.evidence_file)
     task_id, query, credit_type, credit_hash = CASES[args.case]
     history = API + '/v1/discovery/task-history?' + urlencode({'state': 'COMPLETED', 'q': query, 'limit': 20})
-    rows = read(history)['items']
+    rows = load(history)['items']
     row, = (item for item in rows if item['task']['taskId'] == task_id)
-    receipt, key = read(f'{API}/v1/tasks/{task_id}/receipt'), read(KEY)
+    receipt, key = load(f'{API}/v1/tasks/{task_id}/receipt'), load(KEY)
     content, m = verify_receipt(task_id, row, receipt, key)
     send_hash = m['paidTransactionHash']
-    send_tx = transaction(send_hash)
+    send_tx = transaction(send_hash, load)
     send = verify_block(send_tx, send_hash)
-    credit_tx = transaction(credit_hash)
+    credit_tx = transaction(credit_hash, load)
     credit_block = verify_block(credit_tx, credit_hash)
     link_payment(m, send, credit_block, credit_type)
-    send_prev = verify_block(transaction(send['previous']), send['previous'])
+    send_prev = verify_block(transaction(send['previous'], load), send['previous'])
     debit = -delta(send, send_prev)
     if credit_type == 'OPEN':
         credit = number(credit_block['balance'])
         native_blocks = 3
     else:
-        credit_prev = verify_block(transaction(credit_block['previous']), credit_block['previous'])
+        credit_prev = verify_block(transaction(credit_block['previous'], load), credit_block['previous'])
         credit = delta(credit_block, credit_prev)
         native_blocks = 4
     need(debit == credit == number(send['amount']) > 0, 'signed balances disagree with SEND amount')
@@ -257,7 +280,10 @@ def main():
     print(json.dumps({
         'checkedAt': datetime.now(timezone.utc).isoformat(), 'taskId': task_id, 'case': args.case,
         'historyReceiptFields': sorted(row['receipt']), 'receiptId': content['receiptId'],
-        'marketplaceSignature': 'verified with published key', 'outcome': content['outcome'],
+        'marketplaceSignature': ('verified with published key' if args.evidence_file is None
+                                 else 'verified with pinned published key from offline evidence'),
+        'outcome': content['outcome'],
+        **({'evidenceMode': 'offline'} if args.evidence_file is not None else {}),
         'grossAtomic': content['grossAtomic'], 'publicationFeeAtomic': content['publicationFeeAtomic'],
         'submissionHash': m['submissionHash'], 'submissionBytesVerified': False,
         'sendHash': send_hash, 'creditHash': credit_hash, 'creditType': credit_type,

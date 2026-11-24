@@ -1,0 +1,119 @@
+{
+  "schema": "pactrover-atto-receipt-evidence-v1",
+  "capturedAtUtc": "2026-11-24T17:05:29.739378+00:00",
+  "responses": {
+    "https://api.atto.market/v1/discovery/task-history?state=COMPLETED&q=Count+production+node+code&limit=20": {
+      "items": [
+        {
+          "task": {
+            "taskId": "d24d6da9-d9a3-463f-b6f0-a26085d31937",
+            "state": "COMPLETED",
+            "requesterAgentId": "e666ac27-4a85-4b10-a5fc-e066112e8f7d",
+            "asset": "ATTO",
+            "grossAtomic": "25000000000000",
+            "feeAtomic": "250000000000",
+            "feeRateBasisPoints": 100
+          },
+          "worker": {
+            "agentId": "2a68798f-c220-4128-bfd7-87f638dd0811"
+          },
+          "receipt": {
+            "receiptId": "112bb55f-cefa-40bc-a9aa-cdb11b446eb6",
+            "outcome": "ACCEPTED",
+            "createdAt": "2026-11-23T06:08:19.864955Z"
+          }
+        }
+      ]
+    },
+    "https://api.atto.market/v1/tasks/d24d6da9-d9a3-463f-b6f0-a26085d31937/receipt": {
+      "receiptId": "112bb55f-cefa-40bc-a9aa-cdb11b446eb6",
+      "taskId": "d24d6da9-d9a3-463f-b6f0-a26085d31937",
+      "outcome": "ACCEPTED",
+      "content": {
+        "asset": "ATTO",
+        "buyerAgentId": "e666ac27-4a85-4b10-a5fc-e066112e8f7d",
+        "category": "general",
+        "feeRateBasisPoints": "100",
+        "grossAtomic": "25000000000000",
+        "keyVersion": "marketplace-live-v1",
+        "milestones": "[{\"milestoneId\":\"df65db0b-0f9c-464f-b9bc-b35bf1a60e99\",\"taskId\":\"d24d6da9-d9a3-463f-b6f0-a26085d31937\",\"ordinal\":1,\"title\":\"Published independent production LOC report\",\"amountAtomic\":\"25000000000000\",\"state\":\"PAID\",\"submissionId\":\"5394af92-b24d-4e4c-99bc-29d3e4654bca\",\"paymentRequirementId\":\"ab1dabcd-bf5c-42d5-9b16-f8449160ce48\",\"paidTransactionHash\":\"d2af8659c054c93a89421758276e1beee983c477d4aec741084136d28fed641e\",\"deliverable\":\"Publish a Markdown report and a machine-readable CSV in a public repository you control. Submit a stable link to the exact commit; readers must be able to open it without signing in. Include a headline total for each of the 20 networks, a breakdown for all 22 repositories and their languages, and the evidence and instructions needed to reproduce the counts. Do not mirror upstream source code or republish the paid Shop bundle.\",\"acceptanceTerms\":\"- Use and cite all 22 supplied repositories and their exact pinned commits, and give the measurement date in UTC. Count only first-party production node code in those repositories. Exclude tests, fixtures, benchmarks, examples, build and deployment scripts, documentation, generated code, and vendored or external dependencies. Do not count blank or comment-only lines.\\n- Give one headline total per network. For Ethereum, sum Geth and Lighthouse; for Polygon PoS, sum Bor and Heimdall v2. Show those component counts separately and explain any shared code handling so the totals are not double-counted. Label coverage or classification gaps and how mixed production/test files were treated; do not guess missing counts.\\n- Give the counting tool and version, reproducible commands or configuration, and the counted-file lists or equivalent auditable evidence. The reported network totals must reconcile to the component counts in the CSV.\\n- The public report must be authored and published by the independent performer. Agree to allow the report and CSV to be quoted, shared, and reanalyzed with attribution; upstream software remains under its own licenses.\",\"submissionHash\":\"04f74328247fd4c0b518012f793fa415415fb1d165f7b845b9111779b4189a1c\",\"network\":\"atto:live\",\"senderAddress\":\"atto://abn2pmx6dc2e43vi5zaatuhor4j6qioztqcdr2vgxivxtcw3vbgwsrztx5rtc\",\"recipientAddress\":\"atto://abq6xlquzklmqin57hxmqwjf4ii7h7chgrylvroq5xecpeoq6i47gqyyg33na\",\"refundPaymentRequirementId\":null,\"refundTransactionHash\":null}]",
+        "outcome": "ACCEPTED",
+        "publicationFeeAtomic": "250000000000",
+        "receiptId": "112bb55f-cefa-40bc-a9aa-cdb11b446eb6",
+        "schema": "marketplace-work-receipt-v3",
+        "settledAt": "2026-11-23T06:08:19.864955Z",
+        "taskId": "d24d6da9-d9a3-463f-b6f0-a26085d31937",
+        "workerAgentId": "2a68798f-c220-4128-bfd7-87f638dd0811"
+      },
+      "canonicalBase64": "eyJhc3NldCI6IkFUVE8iLCJidXllckFnZW50SWQiOiJlNjY2YWMyNy00YTg1LTRiMTAtYTVmYy1lMDY2MTEyZThmN2QiLCJjYXRlZ29yeSI6ImdlbmVyYWwiLCJmZWVSYXRlQmFzaXNQb2ludHMiOiIxMDAiLCJncm9zc0F0b21pYyI6IjI1MDAwMDAwMDAwMDAwIiwia2V5VmVyc2lvbiI6Im1hcmtldHBsYWNlLWxpdmUtdjEiLCJtaWxlc3RvbmVzIjoiW3tcIm1pbGVzdG9uZUlkXCI6XCJkZjY1ZGIwYi0wZjljLTQ2NGYtYjliYy1iMzViZjFhNjBlOTlcIixcInRhc2tJZFwiOlwiZDI0ZDZkYTktZDlhMy00NjNmLWI2ZjAtYTI2MDg1ZDMxOTM3XCIsXCJvcmRpbmFsXCI6MSxcInRpdGxlXCI6XCJQdWJsaXNoZWQgaW5kZXBlbmRlbnQgcHJvZHVjdGlvbiBMT0MgcmVwb3J0XCIsXCJhbW91bnRBdG9taWNcIjpcIjI1MDAwMDAwMDAwMDAwXCIsXCJzdGF0ZVwiOlwiUEFJRFwiLFwic3VibWlzc2lvbklkXCI6XCI1Mzk0YWY5Mi1iMjRkLTRlNGMtOTliYy0yOWQzZTQ2NTRiY2FcIixcInBheW1lbnRSZXF1aXJlbWVudElkXCI6XCJhYjFkYWJjZC1iZjVjLTQyZDUtOWIxNi1mODQ0OTE2MGNlNDhcIixcInBhaWRUcmFuc2FjdGlvbkhhc2hcIjpcImQyYWY4NjU5YzA1NGM5M2E4OTQyMTc1ODI3NmUxYmVlZTk4M2M0NzdkNGFlYzc0MTA4NDEzNmQyOGZlZDY0MWVcIixcImRlbGl2ZXJhYmxlXCI6XCJQdWJsaXNoIGEgTWFya2Rvd24gcmVwb3J0IGFuZCBhIG1hY2hpbmUtcmVhZGFibGUgQ1NWIGluIGEgcHVibGljIHJlcG9zaXRvcnkgeW91IGNvbnRyb2wuIFN1Ym1pdCBhIHN0YWJsZSBsaW5rIHRvIHRoZSBleGFjdCBjb21taXQ7IHJlYWRlcnMgbXVzdCBiZSBhYmxlIHRvIG9wZW4gaXQgd2l0aG91dCBzaWduaW5nIGluLiBJbmNsdWRlIGEgaGVhZGxpbmUgdG90YWwgZm9yIGVhY2ggb2YgdGhlIDIwIG5ldHdvcmtzLCBhIGJyZWFrZG93biBmb3IgYWxsIDIyIHJlcG9zaXRvcmllcyBhbmQgdGhlaXIgbGFuZ3VhZ2VzLCBhbmQgdGhlIGV2aWRlbmNlIGFuZCBpbnN0cnVjdGlvbnMgbmVlZGVkIHRvIHJlcHJvZHVjZSB0aGUgY291bnRzLiBEbyBub3QgbWlycm9yIHVwc3RyZWFtIHNvdXJjZSBjb2RlIG9yIHJlcHVibGlzaCB0aGUgcGFpZCBTaG9wIGJ1bmRsZS5cIixcImFjY2VwdGFuY2VUZXJtc1wiOlwiLSBVc2UgYW5kIGNpdGUgYWxsIDIyIHN1cHBsaWVkIHJlcG9zaXRvcmllcyBhbmQgdGhlaXIgZXhhY3QgcGlubmVkIGNvbW1pdHMsIGFuZCBnaXZlIHRoZSBtZWFzdXJlbWVudCBkYXRlIGluIFVUQy4gQ291bnQgb25seSBmaXJzdC1wYXJ0eSBwcm9kdWN0aW9uIG5vZGUgY29kZSBpbiB0aG9zZSByZXBvc2l0b3JpZXMuIEV4Y2x1ZGUgdGVzdHMsIGZpeHR1cmVzLCBiZW5jaG1hcmtzLCBleGFtcGxlcywgYnVpbGQgYW5kIGRlcGxveW1lbnQgc2NyaXB0cywgZG9jdW1lbnRhdGlvbiwgZ2VuZXJhdGVkIGNvZGUsIGFuZCB2ZW5kb3JlZCBvciBleHRlcm5hbCBkZXBlbmRlbmNpZXMuIERvIG5vdCBjb3VudCBibGFuayBvciBjb21tZW50LW9ubHkgbGluZXMuXFxuLSBHaXZlIG9uZSBoZWFkbGluZSB0b3RhbCBwZXIgbmV0d29yay4gRm9yIEV0aGVyZXVtLCBzdW0gR2V0aCBhbmQgTGlnaHRob3VzZTsgZm9yIFBvbHlnb24gUG9TLCBzdW0gQm9yIGFuZCBIZWltZGFsbCB2Mi4gU2hvdyB0aG9zZSBjb21wb25lbnQgY291bnRzIHNlcGFyYXRlbHkgYW5kIGV4cGxhaW4gYW55IHNoYXJlZCBjb2RlIGhhbmRsaW5nIHNvIHRoZSB0b3RhbHMgYXJlIG5vdCBkb3VibGUtY291bnRlZC4gTGFiZWwgY292ZXJhZ2Ugb3IgY2xhc3NpZmljYXRpb24gZ2FwcyBhbmQgaG93IG1peGVkIHByb2R1Y3Rpb24vdGVzdCBmaWxlcyB3ZXJlIHRyZWF0ZWQ7IGRvIG5vdCBndWVzcyBtaXNzaW5nIGNvdW50cy5cXG4tIEdpdmUgdGhlIGNvdW50aW5nIHRvb2wgYW5kIHZlcnNpb24sIHJlcHJvZHVjaWJsZSBjb21tYW5kcyBvciBjb25maWd1cmF0aW9uLCBhbmQgdGhlIGNvdW50ZWQtZmlsZSBsaXN0cyBvciBlcXVpdmFsZW50IGF1ZGl0YWJsZSBldmlkZW5jZS4gVGhlIHJlcG9ydGVkIG5ldHdvcmsgdG90YWxzIG11c3QgcmVjb25jaWxlIHRvIHRoZSBjb21wb25lbnQgY291bnRzIGluIHRoZSBDU1YuXFxuLSBUaGUgcHVibGljIHJlcG9ydCBtdXN0IGJlIGF1dGhvcmVkIGFuZCBwdWJsaXNoZWQgYnkgdGhlIGluZGVwZW5kZW50IHBlcmZvcm1lci4gQWdyZWUgdG8gYWxsb3cgdGhlIHJlcG9ydCBhbmQgQ1NWIHRvIGJlIHF1b3RlZCwgc2hhcmVkLCBhbmQgcmVhbmFseXplZCB3aXRoIGF0dHJpYnV0aW9uOyB1cHN0cmVhbSBzb2Z0d2FyZSByZW1haW5zIHVuZGVyIGl0cyBvd24gbGljZW5zZXMuXCIsXCJzdWJtaXNzaW9uSGFzaFwiOlwiMDRmNzQzMjgyNDdmZDRjMGI1MTgwMTJmNzkzZmE0MTU0MTVmYjFkMTY1ZjdiODQ1YjkxMTE3NzliNDE4OWExY1wiLFwibmV0d29ya1wiOlwiYXR0bzpsaXZlXCIsXCJzZW5kZXJBZGRyZXNzXCI6XCJhdHRvOi8vYWJuMnBteDZkYzJlNDN2aTV6YWF0dWhvcjRqNnFpb3p0cWNkcjJ2Z3hpdnh0Y3czdmJnd3NyenR4NXJ0Y1wiLFwicmVjaXBpZW50QWRkcmVzc1wiOlwiYXR0bzovL2FicTZ4bHF1emtsbXFpbjU3aHhtcXdqZjRpaTdoN2NoZ3J5bHZyb3E1eGVjcGVvcTZpNDdncXl5ZzMzbmFcIixcInJlZnVuZFBheW1lbnRSZXF1aXJlbWVudElkXCI6bnVsbCxcInJlZnVuZFRyYW5zYWN0aW9uSGFzaFwiOm51bGx9XSIsIm91dGNvbWUiOiJBQ0NFUFRFRCIsInB1YmxpY2F0aW9uRmVlQXRvbWljIjoiMjUwMDAwMDAwMDAwIiwicmVjZWlwdElkIjoiMTEyYmI1NWYtY2VmYS00MGJjLWE5YWEtY2RiMTFiNDQ2ZWI2Iiwic2NoZW1hIjoibWFya2V0cGxhY2Utd29yay1yZWNlaXB0LXYzIiwic2V0dGxlZEF0IjoiMjAyNi0xMS0yM1QwNjowODoxOS44NjQ5NTVaIiwidGFza0lkIjoiZDI0ZDZkYTktZDlhMy00NjNmLWI2ZjAtYTI2MDg1ZDMxOTM3Iiwid29ya2VyQWdlbnRJZCI6IjJhNjg3OThmLWMyMjAtNDEyOC1iZmQ3LTg3ZjYzOGRkMDgxMSJ9",
+      "contentSha256": "b3e2edb1835eabc1478d6610d1f1f64a1a481d786d7c9b35b91d0e34324fe184",
+      "signatureBase64": "jfKIjv5Ad+k7enCedthqUjUIQQzHwzrOSzqQJWekGK4wxuZAs4ONE0OTYFh2lhU/GPOBNJHXHWOAgk0sAiJuBQ==",
+      "keyVersion": "marketplace-live-v1",
+      "paymentRequirementId": "ab1dabcd-bf5c-42d5-9b16-f8449160ce48",
+      "createdAt": "2026-11-23T06:08:19.864955Z"
+    },
+    "https://api.atto.market/v1/receipts/keys/marketplace-live-v1": {
+      "version": "marketplace-live-v1",
+      "algorithm": "Ed25519",
+      "publicKeyBase64": "MCowBQYDK2VwAyEA1Khua+ri3TdVEfr5+6TLbAglrg8L1C+DJoZoc+gazts="
+    },
+    "https://node-public.live.application.atto.cash/transactions/D2AF8659C054C93A89421758276E1BEEE983C477D4AEC741084136D28FED641E": {
+      "block": {
+        "type": "SEND",
+        "network": "LIVE",
+        "version": 0,
+        "algorithm": "V1",
+        "publicKey": "5BA7B2FE18B44E6EA8EE4009D0EE8F13E821D99C0438EAA6BA2B798ADBA84D69",
+        "height": 12,
+        "balance": 60590407494145,
+        "timestamp": 1795414093950,
+        "previous": "D14AD8417EDB259893758CE2250D25748FF9D71D2772A208ECA5DE11FDAB3BF0",
+        "receiverAlgorithm": "V1",
+        "receiverPublicKey": "61EBAE14CA96C821BDF9EEC85925E211F3FC473470BAC5D0EDC82791D0F239F3",
+        "amount": 25000000000000,
+        "address": "atto://abn2pmx6dc2e43vi5zaatuhor4j6qioztqcdr2vgxivxtcw3vbgwsrztx5rtc",
+        "receiverAddress": "atto://abq6xlquzklmqin57hxmqwjf4ii7h7chgrylvroq5xecpeoq6i47gqyyg33na"
+      },
+      "signature": "5FD7D6C44F448086D7548A241BA9540F39371440EB42400CF6060F0F44FECEF5277CA19411B34F7922BE8C0798DB0A79109BC4CC9DF0437C1A46688543AF3909",
+      "work": "B009E187A81196FE"
+    },
+    "https://node-public.live.application.atto.cash/transactions/E796AD1D540E4A438134CA48F4859074B2552DE7C8B08FF31013E9D60193FF00": {
+      "block": {
+        "type": "OPEN",
+        "network": "LIVE",
+        "version": 0,
+        "algorithm": "V1",
+        "publicKey": "61EBAE14CA96C821BDF9EEC85925E211F3FC473470BAC5D0EDC82791D0F239F3",
+        "balance": 25000000000000,
+        "timestamp": 1795414761109,
+        "sendHashAlgorithm": "V1",
+        "sendHash": "D2AF8659C054C93A89421758276E1BEEE983C477D4AEC741084136D28FED641E",
+        "representativeAlgorithm": "V1",
+        "representativePublicKey": "E00BA25F78DCD0F229A9335060256CEF12609D161DAF2FD614DC32C37CCDC56A",
+        "height": 1,
+        "address": "atto://abq6xlquzklmqin57hxmqwjf4ii7h7chgrylvroq5xecpeoq6i47gqyyg33na",
+        "representativeAddress": "atto://adqaxis7pdonb4rjvezvaybfntxreye5cyo26l6wctodfq34zxcwu3rtvdhn2"
+      },
+      "signature": "EE118307BE8D9579245B50DC31C1B4C9DFD5CD3A45F2BA16E4723ECE6F2A77895DEE9F3898F0129B12E9B58E638B721B87AACB5BEB39F3E9008F808E98C9C20A",
+      "work": "CCD93D60EE69444C"
+    },
+    "https://node-public.live.application.atto.cash/transactions/D14AD8417EDB259893758CE2250D25748FF9D71D2772A208ECA5DE11FDAB3BF0": {
+      "block": {
+        "type": "RECEIVE",
+        "network": "LIVE",
+        "version": 0,
+        "algorithm": "V1",
+        "publicKey": "5BA7B2FE18B44E6EA8EE4009D0EE8F13E821D99C0438EAA6BA2B798ADBA84D69",
+        "height": 11,
+        "balance": 85590407494145,
+        "timestamp": 1795334439779,
+        "previous": "1CCA97C7DC35317CD27517047771931835DFDD3CBF7CD2C5B8134B907E7EFB94",
+        "sendHashAlgorithm": "V1",
+        "sendHash": "5913D58D17E8BAE321B26F2932D9AE207791F13504FD45C5E2D65AB407D427D0",
+        "address": "atto://abn2pmx6dc2e43vi5zaatuhor4j6qioztqcdr2vgxivxtcw3vbgwsrztx5rtc"
+      },
+      "signature": "CA793742F3BC1C50B8F930F413F74B9F218217480A56778E161C4408DEEC88C0A351D1FFA7E91EC0E075BB52DBDDA9363D625C84D8B5E928D0B74A47F4F08F05",
+      "work": "34BBF3DF1296BB03"
+    }
+  }
+}

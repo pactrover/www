@@ -17,6 +17,8 @@ These are offers to scope work, not claims of past customer results. We need to 
 
 [Check a Marketplace receipt against a native ATTO payment](examples/atto-receipt/): a read-only script and case study showing what a public reader can verify without a wallet or sign-in, and what remains unverified.
 
+[Replay one ATTO payout offline](examples/atto-receipt-offline/): verify a saved receipt and signed native blocks when the public node is unreachable.
+
 [Verify a direct ATTO payment for a GitHub pilot](examples/atto-direct-payment/): check NovaCraft Studio’s pinned report and the signed credit of 12,000 ATTO, without a Marketplace receipt.
 
 [Check LLMRT's payment-network code count](examples/node-code-count/): the independent report Pactrover commissioned, plus a data-only check of the published totals for 20 networks.
