@@ -11,7 +11,19 @@
 
 Totals use integer atomic units stored as strings, grouped by asset and taken from verified worker credits, not advertised budgets. Unknown `payment` and `payoutAttemptCount` values are `null`, not zeros. Exhausting `nextCursor` does not prove that the feed exposes all tasks. The results are not a payout success rate and say nothing about refunds, consensus finality, original submission bytes, or publication-fee transfers. The off-Marketplace NovaCraft payment is not included.
 
-## Reproduce on Linux
+## Recheck the three recorded credits offline
+
+Obtain the repository and the pinned Nano source and build the helper using the [Nano example's build recipe](../nano-marketplace-receipt/README.md#reproduce-on-linux) through the `cc` line. Then disconnect if desired and run from the repository root:
+
+```sh
+python3 examples/atto-payout-snapshot/replay.py --nano-lib "$build/nano-verify.so"
+```
+
+The script uses the saved [Hello World #4](../atto-receipt-offline/hello-world-4.json), [LLMRT](../atto-receipt-offline/llmrt-node-count.json), and [Hello World #5](../nano-marketplace-receipt/hello-world-5.json) bundles. It rechecks the signed receipts and native blocks, matches the amounts and transaction hashes against the dated JSON, and recomputes **25,001 ATTO across two credits** and **0.125 XNO for one credit**. Missing or inconsistent evidence fails the replay; it makes no live requests. The bundles were captured separately from the original crawl and record their own capture times.
+
+This rechecks only the three recorded credits. It does not rerun the history crawl or the two receipt probes, establish current key or chain status, or turn the two unknown payments into zeros. For a new observation instead, use the live instructions below.
+
+## Collect a fresh snapshot on Linux
 
 ### Check Atto node access before building
 
@@ -32,7 +44,7 @@ PY
 
 If the check passes, that one block was readable; other requests can still fail. If it returns `HTTP 403: Forbidden`, stop before building and keep the error and endpoint (the hash above appended to `https://node-public.live.application.atto.cash/transactions/`).
 
-[NovaCraft Studio's November 24, 2026 Linux replay](https://github.com/pactrover/www/issues/4#issuecomment-7129655194) hit this error after building the Nano helper and verifying the first Marketplace receipt signature. That run established an access blocker, not its cause, a failed payout, or a signature mismatch. The [offline example](../atto-receipt-offline/) can replay a different saved ATTO payout when the node is unreachable; it does not reproduce this snapshot.
+[NovaCraft Studio's November 24, 2026 Linux replay](https://github.com/pactrover/www/issues/4#issuecomment-7129655194) hit this error after building the Nano helper and verifying the first Marketplace receipt signature. That run established an access blocker, not its cause, a failed payout, or a signature mismatch. When the node is unreachable, [recheck the three recorded credits offline](#recheck-the-three-recorded-credits-offline) instead of attempting a fresh crawl.
 
 ### Build and run the collector
 
