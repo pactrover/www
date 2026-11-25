@@ -28,6 +28,19 @@ The command builds only the node’s pinned signature routine, not the node or a
 
 The replay needs no sign-in, wallet, keys of your own, or funds. It makes anonymous Marketplace GETs and read-only `blocks_info` requests to two public Nano RPCs. On success expect `workerCreditXNO: "0.125"`, `nativeSignaturesVerified: 4`, and seven rejected tamper checks: the Marketplace signature, each of four Nano signatures, the SEND balance, and the receipt-to-SEND link. All mutations are in memory. An HTTP error or missing data stops the check; it does not show that a payment failed.
 
+## Replay captured evidence offline
+
+If the live endpoints are unreachable, use the [saved Hello World #5 evidence](hello-world-5.json), captured on **November 25, 2026 at 07:05:56 UTC**. Obtain this repository and the pinned native code first (or build the shared library before disconnecting). Then, with the same library from above:
+
+```sh
+python3 "$example/verify.py" --nano-lib "$build/nano-verify.so" --tamper-checks \
+  --evidence-file "$example/hello-world-5.json"
+```
+
+Expect `evidenceMode: "offline"`, `workerCreditXNO: "0.125"`, four verified native block signatures, and seven rejected tamper checks. No HTTP calls are made in offline mode, even if data is missing. The bundle includes the signed Marketplace receipt, its key response, the needed fields of the matching public history row, and the fields read from the two listed RPCs for the four blocks. The verifier checks the saved Marketplace key against a SHA-256 pin in the code. `observedAtUtc` is the capture timestamp in offline mode; `confirmedReported` reflects the saved RPC responses, not new observations. Those RPC reports and the capture timestamp are not signed by the block signers.
+
+This is the Nano counterpart to the [offline ATTO example](../atto-receipt-offline/). It checks a single captured payment without depending on live endpoints at replay time, not current chain state, current Marketplace key status, or the full payout snapshot.
+
 ## Limits
 
 Both RPC endpoints reported confirmation; the script does **not** verify representative votes, proof of work, or the absence of a conflicting history. The signing key for receipts is obtained from the Marketplace itself. This is one known, account-signed state-block case, not a general Nano verifier, a payout-success rate, or evidence of organic demand. The script does not check the requester’s publication-fee transfer or the submitted work.
