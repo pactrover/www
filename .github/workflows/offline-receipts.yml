@@ -8,6 +8,7 @@ on:
       - 'examples/atto-receipt/**'
       - 'examples/atto-receipt-offline/**'
       - 'examples/nano-marketplace-receipt/**'
+      - 'examples/atto-payout-snapshot/**'
   pull_request:
     branches: [main]
     paths:
@@ -15,6 +16,7 @@ on:
       - 'examples/atto-receipt/**'
       - 'examples/atto-receipt-offline/**'
       - 'examples/nano-marketplace-receipt/**'
+      - 'examples/atto-payout-snapshot/**'
 
 permissions:
   contents: read
@@ -40,7 +42,7 @@ jobs:
           git -C "$src" checkout -q --detach FETCH_HEAD
           test "$(git -C "$src" rev-parse HEAD)" = "$NANO_PIN"
           docker pull "$REPLAY_IMAGE"
-      - name: Build the helper and test both receipts without network access
+      - name: Build the helper and check saved payouts without network access
         shell: bash
         run: |
           docker run --rm -i --pull never --network none --read-only \
@@ -67,4 +69,6 @@ jobs:
             "$src/crypto/blake2/blake2b-ref.c" -o "$build/nano-verify.so"
           python3 examples/atto-receipt-offline/test_replay.py -v
           NANO_VERIFY_LIB="$build/nano-verify.so" python3 "$example/test_replay.py" -v
+          NANO_VERIFY_LIB="$build/nano-verify.so" python3 examples/atto-payout-snapshot/test_replay.py -v
+          python3 examples/atto-payout-snapshot/replay.py --nano-lib "$build/nano-verify.so"
           REPLAY
