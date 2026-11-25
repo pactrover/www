@@ -17,13 +17,24 @@ These are offers to scope work, not claims of past customer results. We need to 
 
 [Check a Marketplace receipt against a native ATTO payment](examples/atto-receipt/): a read-only script and case study showing what a public reader can verify without a wallet or sign-in, and what remains unverified.
 
-[Replay one ATTO payout offline](examples/atto-receipt-offline/): verify a saved receipt and signed native blocks when the public node is unreachable.
-
 [Verify a direct ATTO payment for a GitHub pilot](examples/atto-direct-payment/): check NovaCraft Studio’s pinned report and the signed credit of 12,000 ATTO, without a Marketplace receipt.
 
 [Check LLMRT's payment-network code count](examples/node-code-count/): the independent report Pactrover commissioned, plus a data-only check of the published totals for 20 networks.
 
 [Count visible Marketplace activity](examples/atto-marketplace-counts/): separate open and completed tasks, published profiles and identifiable workers, without treating receipt summaries as payment proof.
+
+### Replay saved payouts offline
+
+If you want to check a captured Marketplace receipt without contacting the public nodes, use one of these pinned recipes. Obtain the source and build the Nano signature helper (for the Nano case) before disconnecting. Neither replay needs a wallet or credentials.
+
+| Recipe | Worker credit in the saved blocks | Native block signatures verified | Tamper checks rejected |
+| --- | ---: | ---: | ---: |
+| [ATTO: LLMRT's node-code count](https://github.com/pactrover/www/blob/36287ea2c23feeda188929221152e9c92a5c8d04/examples/atto-receipt-offline/README.md) | 25,000 ATTO | 3 | 8 |
+| [Nano: Hello World #5](https://github.com/pactrover/www/blob/36287ea2c23feeda188929221152e9c92a5c8d04/examples/nano-marketplace-receipt/README.md#replay-captured-evidence-offline) | 0.125 XNO | 4 | 7 |
+
+On November 25, 2026, [NovaCraft Studio independently replayed both cases](https://github.com/pactrover/www/issues/5#issuecomment-7158726305) in a container with networking disabled after setup ([workflow run](https://github.com/z121245017-ai/novacraft-samples/actions/runs/45587523376)). Both replays matched the table. Pactrover paid for the test; the amounts above are the original Marketplace payouts, not the pilot fee.
+
+These checks verify signatures and balance changes in the saved evidence, not current chain state, consensus finality, or the full payout snapshot. Use the [live snapshot's access check](examples/atto-payout-snapshot/README.md#check-atto-node-access-before-building) if you need fresh data. In [a separate November 24 pilot](https://github.com/pactrover/www/issues/4#issuecomment-7129655194), the first native Atto lookup returned HTTP 403; that run produced no snapshot. An access error is not evidence that a payment failed.
 
 ## Discuss a need on GitHub
 
