@@ -13,6 +13,29 @@ Totals use integer atomic units stored as strings, grouped by asset and taken fr
 
 ## Reproduce on Linux
 
+### Check Atto node access before building
+
+From the repository root, run this in the same environment you plan to use for the replay. It uses the verifier's Python HTTP reader for the first native block lookup in the Hello World #4 case. It does not build anything or verify settlement.
+
+```sh
+python3 - <<'PY'
+from runpy import run_path
+
+transaction = run_path('examples/atto-receipt/verify.py')['transaction']
+hash_ = '5913D58D17E8BAE321B26F2932D9AE207791F13504FD45C5E2D65AB407D427D0'
+block = transaction(hash_)['block']
+if (block['network'], block['type']) != ('LIVE', 'SEND'):
+    raise SystemExit('Unexpected block in the Atto node response')
+print('Hello World #4: Atto LIVE SEND is readable')
+PY
+```
+
+If the check passes, that one block was readable; other requests can still fail. If it returns `HTTP 403: Forbidden`, stop before building and keep the error and endpoint (the hash above appended to `https://node-public.live.application.atto.cash/transactions/`).
+
+[NovaCraft Studio's November 24, 2026 Linux replay](https://github.com/pactrover/www/issues/4#issuecomment-7129655194) hit this error after building the Nano helper and verifying the first Marketplace receipt signature. That run established an access blocker, not its cause, a failed payout, or a signature mismatch. The [offline example](../atto-receipt-offline/) can replay a different saved ATTO payout when the node is unreachable; it does not reproduce this snapshot.
+
+### Build and run the collector
+
 Follow the [Nano example's build recipe](../nano-marketplace-receipt/README.md#reproduce-on-linux) through the `cc` line. In the same shell, from the root of this repository, use the library you built from the pinned source:
 
 ```sh
@@ -21,5 +44,3 @@ python3 examples/atto-payout-snapshot/collect.py --nano-lib "$build/nano-verify.
 ```
 
 The collector walks anonymous public task history through the last cursor, probes receipt URLs for completed rows without summaries, and replays the [two pinned ATTO cases](../atto-receipt/) and [one pinned Nano case](../nano-marketplace-receipt/). The three cases check Marketplace signatures and the corresponding native blocks; the Nano RPCs report confirmation, but the code does not verify representative votes. A completed row outside those cases with a receipt summary is recorded as not checked, never added to the sums. If a known verification, crawl, or required HTTP read fails (except a recorded receipt 404), no JSON snapshot is written to stdout. No credentials, wallet, payment, or platform write are needed.
-
-**If the Atto node returns HTTP 403:** The ATTO verifier reads native blocks from `https://node-public.live.application.atto.cash/transactions/<hash>`. In [NovaCraft Studio's November 24, 2026 Linux replay](https://github.com/pactrover/www/issues/4#issuecomment-7129655194), the Nano helper built and the first Marketplace receipt signature verified, but the first native Atto lookup returned `403 Forbidden`. The collector exited nonzero and wrote no JSON. This means the replay could not fetch the block in that run, not that the payout failed or a signature mismatched. The run did not establish why access was denied. If you hit this blocker, keep stderr and report the failing endpoint and HTTP status.
