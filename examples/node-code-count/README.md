@@ -37,4 +37,15 @@ The checker reads only those three local files, first matching the SHA-256 value
 
 For example, Ethereum has **344,917 exclusive lines** and a **388,818-line footprint** after adding **43,901 shared lines** referenced by Ethereum. Use the footprint to read an individual network's scope; do not add the footprints to get the portfolio-wide unique total because some shared rows appear in multiple footprints.
 
+### Check the repository and language breakdown, too
+
+Using the same `data` and `base` from above, fetch the [pinned manifest](https://gitee.com/xydhw/llmrt-proofs/raw/473bb541339e4ce1394170167deea42193af0916/atto-code-count-v6/manifest.json) and run the supplemental check:
+
+```sh
+curl -q --fail --silent --show-error --location --max-time 60 "$base/manifest.json" --output "$data/manifest.json"
+python3 examples/node-code-count/check_breakdown.py "$data"
+```
+
+The new check first verifies all four file digests and reruns the network reconciliation. It then matches the ledger's **22 repository pins** to the manifest and rebuilds component footprints, **50 component/language rows**, and **11 language totals** from the ledger. The language on each counted row, not the manifest's language label, controls the language totals. Like the network footprints, component footprints are not additive: a shared file can appear in more than one footprint; the global language totals count it only once. After downloading the files, the checks run offline with Python’s standard library and do not run LLMRT’s counting code.
+
 This is a check of published file identity and arithmetic, not a fresh count of upstream source or an audit of which files belong in scope. The payment receipt does not certify the classifications. The report neither ranks every maintained L1 nor answers [the separate narrower core-code study](https://github.com/pactrover/www/issues/1). Size alone does not establish software quality, safety, or performance.

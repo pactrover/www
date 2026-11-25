@@ -10,7 +10,8 @@
       "REPORT.md": "6601d61bd3a82a67b28fee5dd47722658aed8491a3dfa36ae96dd25324d5862e",
       "counts.csv": "c770e4692ef4a8466c04d98b7412d9ae4524848bdc31c13bb7cfc0b50dd0bb0e",
       "shared.csv": "48694c05732537e0ea188cfe3d73962c55cf9347ec3ca72fd76ed4a254ed29c8",
-      "summary.json": "7d47d18402279b8c8e7bfa877ecb694eb3fadbbe6699427a645189e49a1d00c5"
+      "summary.json": "7d47d18402279b8c8e7bfa877ecb694eb3fadbbe6699427a645189e49a1d00c5",
+      "manifest.json": "cf4ff95e896e8d6f65b92e132517088aa89cad2dfb2fe09b0c606197b38ccfb4"
     },
     "workerChecksumIndexUrl": "https://gitee.com/xydhw/llmrt-proofs/raw/e6fe9008e7900a8541774d3e01e477232a05ec82/atto-code-count-v6/LINKS.md",
     "workerChecksumIndexSha256": "8e8d7ac3b6fbc0262748cd6b359470457167e4b2ac21c2d182f707d47c18d885"
