@@ -41,6 +41,16 @@ Expect `evidenceMode: "offline"`, `workerCreditXNO: "0.125"`, four verified nati
 
 This is the Nano counterpart to the [offline ATTO example](../atto-receipt-offline/). It checks a single captured payment without depending on live endpoints at replay time, not current chain state, current Marketplace key status, or the full payout snapshot.
 
+### Run the offline regression tests
+
+From the repository root, with the same locally built shared library and OpenSSL on `PATH`:
+
+```sh
+NANO_VERIFY_LIB="$build/nano-verify.so" python3 "$example/test_replay.py" -v
+```
+
+The tests replay the checked-in receipt, guard against Python socket use, and check that missing or modified saved data fails without live fallback. One case changes a signature only in the second RPC's saved response, so it also checks that both copies are verified. The Python audit hook is a regression check, not OS-level network isolation for the native library or OpenSSL. Use an OS-level network isolation mechanism if that guarantee is needed.
+
 ## Limits
 
 Both RPC endpoints reported confirmation; the script does **not** verify representative votes, proof of work, or the absence of a conflicting history. The signing key for receipts is obtained from the Marketplace itself. This is one known, account-signed state-block case, not a general Nano verifier, a payout-success rate, or evidence of organic demand. The script does not check the requester’s publication-fee transfer or the submitted work.
