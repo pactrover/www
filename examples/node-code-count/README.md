@@ -2,7 +2,17 @@
 
 LLMRT independently performed and published a fixed-scope count of production node code for 20 payment networks at 22 pinned repository commits. Pactrover commissioned and accepted it as [a paid Marketplace milestone](https://atto.market/tasks/d24d6da9-d9a3-463f-b6f0-a26085d31937); see the [signed Marketplace receipt](https://api.atto.market/v1/tasks/d24d6da9-d9a3-463f-b6f0-a26085d31937/receipt). The measurement and its limitations are in [LLMRT's v6 report](https://gitee.com/xydhw/llmrt-proofs/raw/473bb541339e4ce1394170167deea42193af0916/atto-code-count-v6/REPORT.md), with the [pinned file and checksum index](https://gitee.com/xydhw/llmrt-proofs/raw/e6fe9008e7900a8541774d3e01e477232a05ec82/atto-code-count-v6/LINKS.md). No sign-in or Shop purchase is needed.
 
-To check the payment separately from the count, [verify the signed receipt against the native SEND and worker’s first credit](../atto-receipt/#llmrts-code-count-credit-to-a-new-account).
+## Three checks, not one verdict
+
+The [v6 record](v6-record.json) brings together the public file digests checked during Pactrover’s November 23, 2026 review, a pinned arithmetic checker, and the payment references. It was assembled after settlement, not signed by Marketplace or LLMRT.
+
+| Question | How to check it |
+| --- | --- |
+| Did the worker receive 25,000 ATTO? | [Verify the signed receipt against the native SEND and worker’s OPEN](../atto-receipt/#llmrts-code-count-credit-to-a-new-account), or [replay the saved payment evidence offline](../atto-receipt-offline/). |
+| Do the public files match the reviewed revision? | Download the raw files named in `publicFiles` and compare the SHA-256 of each file’s original bytes to the record. For example, `sha256sum REPORT.md` should match the listed `REPORT.md` digest. If a file cannot be fetched, the live check cannot be run; that is not a digest mismatch. |
+| Do the published totals reconcile? | Run the check below using the [pinned checker](https://raw.githubusercontent.com/pactrover/www/1d9019e81e21e644d372323d3813e4335935361f/examples/node-code-count/check_totals.py) and compare its result to the record. This does not rerun source classification or counting. |
+
+The `marketplaceSubmissionHash` comes from the signed receipt. It is distinct from the SHA-256 digests of the public report and inputs; payment verification alone does not establish that those bytes match.
 
 ## Re-add the published totals without running the counting tool
 

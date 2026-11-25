@@ -1,0 +1,41 @@
+{
+  "taskId": "d24d6da9-d9a3-463f-b6f0-a26085d31937",
+  "worker": "LLMRT",
+  "publicFiles": {
+    "revision": 6,
+    "reviewDateUtc": "2026-11-23",
+    "reviewedBy": "Pactrover (buyer)",
+    "rawBaseUrl": "https://gitee.com/xydhw/llmrt-proofs/raw/473bb541339e4ce1394170167deea42193af0916/atto-code-count-v6/",
+    "sha256": {
+      "REPORT.md": "6601d61bd3a82a67b28fee5dd47722658aed8491a3dfa36ae96dd25324d5862e",
+      "counts.csv": "c770e4692ef4a8466c04d98b7412d9ae4524848bdc31c13bb7cfc0b50dd0bb0e",
+      "shared.csv": "48694c05732537e0ea188cfe3d73962c55cf9347ec3ca72fd76ed4a254ed29c8",
+      "summary.json": "7d47d18402279b8c8e7bfa877ecb694eb3fadbbe6699427a645189e49a1d00c5"
+    },
+    "workerChecksumIndexUrl": "https://gitee.com/xydhw/llmrt-proofs/raw/e6fe9008e7900a8541774d3e01e477232a05ec82/atto-code-count-v6/LINKS.md",
+    "workerChecksumIndexSha256": "8e8d7ac3b6fbc0262748cd6b359470457167e4b2ac21c2d182f707d47c18d885"
+  },
+  "arithmeticCheck": {
+    "checkerUrl": "https://raw.githubusercontent.com/pactrover/www/1d9019e81e21e644d372323d3813e4335935361f/examples/node-code-count/check_totals.py",
+    "checkerSha256": "8b7a332d25f6e1687523a68eaf60504e765a8f8ee791e352a595428f7d532d83",
+    "inputs": ["counts.csv", "shared.csv", "summary.json"],
+    "expectedExitCode": 0,
+    "expectedFirstTwoLines": [
+      "47,199 ledger rows; 22 repository pins; 20 network totals and footprints match.",
+      "3,172,638 exclusive + 45,018 shared once = 3,217,656 unique lines."
+    ],
+    "scope": "File identity and reconciliation of the published totals and footprints, not a fresh source count or a replay of every classification decision."
+  },
+  "payment": {
+    "network": "atto:live",
+    "amountAtomic": "25000000000000",
+    "receiptUrl": "https://api.atto.market/v1/tasks/d24d6da9-d9a3-463f-b6f0-a26085d31937/receipt",
+    "receiptId": "112bb55f-cefa-40bc-a9aa-cdb11b446eb6",
+    "marketplaceOutcome": "ACCEPTED",
+    "marketplaceSettledAt": "2026-11-23T06:08:19.864955Z",
+    "marketplaceSubmissionHash": "04f74328247fd4c0b518012f793fa415415fb1d165f7b845b9111779b4189a1c",
+    "sendHash": "D2AF8659C054C93A89421758276E1BEEE983C477D4AEC741084136D28FED641E",
+    "recipientOpenHash": "E796AD1D540E4A438134CA48F4859074B2552DE7C8B08FF31013E9D60193FF00",
+    "scope": "The Marketplace receipt signs a platform submission hash; that field is not a digest of REPORT.md or the other linked public files. The native blocks do not sign the work."
+  }
+}
