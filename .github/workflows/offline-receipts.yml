@@ -1,0 +1,70 @@
+name: Offline receipt replay
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/offline-receipts.yml'
+      - 'examples/atto-receipt/**'
+      - 'examples/atto-receipt-offline/**'
+      - 'examples/nano-marketplace-receipt/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/offline-receipts.yml'
+      - 'examples/atto-receipt/**'
+      - 'examples/atto-receipt-offline/**'
+      - 'examples/nano-marketplace-receipt/**'
+
+permissions:
+  contents: read
+
+jobs:
+  offline-receipts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      NANO_PIN: 0d8eea4524b8da626cbab50c286c48eae25c76a9
+      # Python 3.12 Bookworm image from the independent replay in issue #5.
+      REPLAY_IMAGE: public.ecr.aws/docker/library/python@sha256:5f0cc9bc924d72614831d2b1575de5d7c4114609a0d42ca60dfc2f0abca10dd6
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Fetch the pinned public build inputs
+        shell: bash
+        run: |
+          src="$RUNNER_TEMP/nano-node"
+          git init -q "$src"
+          git -C "$src" fetch -q --depth=1 https://github.com/nanocurrency/nano-node.git "$NANO_PIN"
+          git -C "$src" checkout -q --detach FETCH_HEAD
+          test "$(git -C "$src" rev-parse HEAD)" = "$NANO_PIN"
+          docker pull "$REPLAY_IMAGE"
+      - name: Build the helper and test both receipts without network access
+        shell: bash
+        run: |
+          docker run --rm -i --pull never --network none --read-only \
+            --cap-drop ALL --security-opt no-new-privileges \
+            --tmpfs /tmp:rw,exec,nosuid,nodev,mode=1777 --user "$(id -u):$(id -g)" \
+            --env HOME=/tmp --env PYTHONDONTWRITEBYTECODE=1 \
+            --mount "type=bind,source=$GITHUB_WORKSPACE,target=/work/repo,readonly" \
+            --mount "type=bind,source=$RUNNER_TEMP/nano-node,target=/work/nano-node,readonly" \
+            --workdir /work/repo "$REPLAY_IMAGE" bash -seu -o pipefail <<'REPLAY'
+          python3 - <<'PY'
+          import socket
+          interfaces = sorted(name for _, name in socket.if_nameindex())
+          if interfaces != ['lo']:
+              raise SystemExit(f'Expected only loopback, found {interfaces!r}')
+          print('Network interfaces: lo only')
+          PY
+          python3 --version
+          openssl version
+          src=/work/nano-node
+          example=examples/nano-marketplace-receipt
+          build=$(mktemp -d)
+          cc -O2 -fPIC -shared -DED25519_CUSTOMHASH -DED25519_CUSTOMRNG -I"$src" \
+            "$example/nano_hash.c" "$src/crypto/ed25519-donna/ed25519.c" \
+            "$src/crypto/blake2/blake2b-ref.c" -o "$build/nano-verify.so"
+          python3 examples/atto-receipt-offline/test_replay.py -v
+          NANO_VERIFY_LIB="$build/nano-verify.so" python3 "$example/test_replay.py" -v
+          REPLAY
