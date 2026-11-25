@@ -1,0 +1,81 @@
+name: Commons guide Windows check
+
+on:
+  push:
+    branches: [verify/commons-windows-t_38b7c814]
+    paths: ['.github/workflows/commons-windows-check.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: windows-2025
+    timeout-minutes: 8
+    steps:
+      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        with:
+          node-version: '24.22.3'
+          architecture: x64
+          package-manager-cache: false
+      - name: Install the five pins and run the exact PR snippet
+        shell: pwsh
+        run: |
+          @'
+          import hashlib
+          import os
+          import platform
+          import re
+          import shutil
+          import subprocess
+          import urllib.request
+          from pathlib import Path
+
+          url = ('https://raw.githubusercontent.com/attocash/docs/'
+                 'da4062163cd9a52fd384e7e40f1a6006c92ff7e4/'
+                 'integration/advanced/offline-signing-with-atto-commons.mdx')
+          print('Guide:', url, flush=True)
+          print('Host:', platform.platform(), platform.machine(), flush=True)
+          print('Image:', os.environ.get('ImageOS'), os.environ.get('ImageVersion'), flush=True)
+          with urllib.request.urlopen(url, timeout=30) as response:
+              page = response.read().decode('utf-8').replace('\r\n', '\n')
+          install, smoke = page.split('### Check the JavaScript installation locally', 1)
+          block = re.search(r'```bash\n(.*?)```', install, re.S).group(1)
+          packages = re.findall(r'@attocash/[\w-]+@\d+\.\d+\.\d+', block)
+          expected = ['core', 'node', 'node-remote', 'wallet', 'worker-remote']
+          assert packages == [f'@attocash/commons-{x}@7.0.2' for x in expected], packages
+          snippet = re.search(r'```javascript\n(.*?)```', smoke, re.S).group(1)
+          digest = hashlib.sha256(snippet.encode('utf-8')).hexdigest()
+          assert digest == '16f857105f6bb8050d36538e82abe7785b7122abdf072ef5df21925df411fe12', digest
+          print('Snippet SHA-256:', digest, flush=True)
+
+          npm = shutil.which('npm.cmd')
+          node = shutil.which('node.exe')
+          assert npm and node
+          work = Path(os.environ['RUNNER_TEMP']) / 'commons-first-run'
+          work.mkdir()
+
+          def run(*args, **kwargs):
+              print('>', subprocess.list2cmdline(args), flush=True)
+              result = subprocess.run(args, cwd=work, text=True, **kwargs)
+              print('Exit:', result.returncode, flush=True)
+              return result
+
+          run(node, '-p', 'JSON.stringify([process.version,process.platform,process.arch])', check=True)
+          run(npm, '--version', check=True)
+          run(npm, 'init', '-y', check=True)
+          run(npm, 'install', '--ignore-scripts', '--no-audit', '--no-fund', *packages, check=True)
+          run(npm, 'ls', '--depth=0', check=True)
+          (work / 'check-address.mjs').write_bytes(snippet.encode('utf-8'))
+          success = run(node, 'check-address.mjs', check=True, capture_output=True)
+          print(success.stdout.strip(), flush=True)
+          assert success.stdout.strip() == 'Commons address check passed', success.stdout
+          assert snippet.count('p5cjw6fw') == 1
+          (work / 'check-bad-address.mjs').write_bytes(snippet.replace('p5cjw6fw', 'p5cjw7fw').encode('utf-8'))
+          failure = run(node, 'check-bad-address.mjs', capture_output=True)
+          print(failure.stderr, flush=True)
+          assert failure.returncode != 0 and 'Commons address check passed' not in failure.stdout
+          assert 'p5cjw7fw is invalid' in failure.stderr, failure.stderr
+          print('Changed address was rejected as invalid.', flush=True)
+          '@ | python -
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
