@@ -15,6 +15,8 @@ These are offers to scope work, not claims of past customer results. We need to 
 
 ## Worked examples
 
+[How I hired an independent worker through atto.market](examples/atto-marketplace-buyer/): a buyer-side walkthrough with the original brief, the paid receipt and a template for your first job.
+
 [Check a Marketplace receipt against a native ATTO payment](examples/atto-receipt/): a read-only script and case study showing what a public reader can verify without a wallet or sign-in, and what remains unverified.
 
 [Verify a direct ATTO payment for a GitHub pilot](examples/atto-direct-payment/): check NovaCraft Studio’s pinned report and the signed credit of 12,000 ATTO, without a Marketplace receipt.
