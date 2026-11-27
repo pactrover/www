@@ -12,6 +12,8 @@ from uuid import UUID
 
 BASE = 'https://api.atto.market/v1/discovery/'
 COLLECTIONS = ('agents', 'tasks', 'task-history')
+ASSETS = ('ATTO', 'XNO')
+ACTIVE = ('OPEN', 'IN_PROGRESS')
 TERMINAL = ('COMPLETED', 'CANCELLED', 'EXPIRED')
 MAX_PAGES = 100
 MAX_PAGE_BYTES = 8 * 1024 * 1024
@@ -38,6 +40,8 @@ def get_page(collection, params):
 def pages(collection, limit, fetch):
     rows, cursors = [], set()
     params = {'limit': limit}
+    if collection == 'tasks':
+        params['includeInProgress'] = 'true'
     for number in range(1, MAX_PAGES + 1):
         data = fetch(collection, dict(params))
         if not isinstance(data, dict) or not isinstance(data.get('items'), list) or 'nextCursor' not in data:
@@ -80,23 +84,36 @@ def add_unique(ids, key, scope):
     ids.add(key)
 
 
-def summarize(agents, opened, history):
-    published, open_ids, history_ids, workers = set(), set(), set(), set()
+def task_asset(row, scope):
+    asset = field(row, 'asset')
+    if asset not in ASSETS:
+        raise ValueError(f'{scope}: unexpected task asset')
+    return asset
+
+
+def summarize(agents, active, history):
+    published, active_ids, history_ids, workers = set(), set(), set(), set()
     requesters, states = Counter(), Counter()
+    by_asset = {asset: dict.fromkeys(ACTIVE + TERMINAL, 0) for asset in ASSETS}
     accepted_summaries = missing_receipt = missing_worker = 0
     for row in agents:
         add_unique(published, id_field(row, 'agentId'), 'agents')
-    for row in opened:
-        if field(row, 'state') != 'OPEN':
-            raise ValueError('tasks: expected OPEN with no includeInProgress filter')
-        add_unique(open_ids, id_field(row, 'taskId'), 'tasks')
-        requesters[id_field(row, 'requesterAgentId')] += 1
+    for row in active:
+        state = field(row, 'state')
+        if state not in ACTIVE:
+            raise ValueError('tasks: expected OPEN or IN_PROGRESS')
+        add_unique(active_ids, id_field(row, 'taskId'), 'tasks')
+        by_asset[task_asset(row, 'tasks')][state] += 1
+        states[state] += 1
+        if state == 'OPEN':
+            requesters[id_field(row, 'requesterAgentId')] += 1
     for row in history:
         task = field(row, 'task')
         add_unique(history_ids, id_field(task, 'taskId'), 'task-history')
         state = field(task, 'state')
         if state not in TERMINAL:
             raise ValueError('task-history: unexpected task state')
+        by_asset[task_asset(task, 'task-history')][state] += 1
         states[state] += 1
         if state != 'COMPLETED':
             continue
@@ -114,16 +131,18 @@ def summarize(agents, opened, history):
             accepted_summaries += 1
             if worker_id is not None:
                 workers.add(worker_id)
-    if open_ids & history_ids:
+    if active_ids & history_ids:
         raise ValueError('task state changed during the crawl; retry for a fresh snapshot')
     return {
         'published_profiles': len(published),
         'published_profiles_matching_an_accepted_completed_worker': len(published & workers),
         'visible_workers_with_an_accepted_completed_task': len(workers),
-        'open_tasks': len(open_ids),
+        'open_tasks': states['OPEN'],
+        'visible_in_progress_tasks': states['IN_PROGRESS'],
         'requesters_with_open_tasks': len(requesters),
         'largest_open_task_count_by_one_requester': max(requesters.values(), default=0),
         'visible_terminal_tasks': {state: states[state] for state in TERMINAL},
+        'visible_task_counts_by_asset': by_asset,
         'completed_with_accepted_receipt_summary': accepted_summaries,
         'completed_without_public_receipt_summary': missing_receipt,
         'completed_without_public_worker': missing_worker,
