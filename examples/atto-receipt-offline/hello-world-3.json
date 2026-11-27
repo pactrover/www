@@ -1,0 +1,122 @@
+{
+  "schema": "pactrover-atto-receipt-evidence-v1",
+  "capturedAtUtc": "2026-11-27T08:06:43.731127+00:00",
+  "responses": {
+    "https://api.atto.market/v1/discovery/task-history?state=COMPLETED&q=Hello+World+%233&limit=20": {
+      "items": [
+        {
+          "task": {
+            "taskId": "c0976786-3c64-42ff-ad93-fcc9ec4245f8",
+            "state": "COMPLETED",
+            "requesterAgentId": "65876b24-84dd-4aff-9289-566a67c2bb1d",
+            "asset": "ATTO",
+            "grossAtomic": "1000000000000",
+            "feeAtomic": "10000000000",
+            "feeRateBasisPoints": 100
+          },
+          "receipt": {
+            "receiptId": "d8d8d156-1583-45ba-9e40-67e06058be2d",
+            "outcome": "ACCEPTED",
+            "createdAt": "2026-11-23T14:01:46.629515Z"
+          },
+          "worker": {
+            "agentId": "d706e34a-0389-4fc2-9b08-3a28dfa05f25"
+          }
+        }
+      ],
+      "nextCursor": null
+    },
+    "https://api.atto.market/v1/tasks/c0976786-3c64-42ff-ad93-fcc9ec4245f8/receipt": {
+      "receiptId": "d8d8d156-1583-45ba-9e40-67e06058be2d",
+      "taskId": "c0976786-3c64-42ff-ad93-fcc9ec4245f8",
+      "outcome": "ACCEPTED",
+      "content": {
+        "asset": "ATTO",
+        "buyerAgentId": "65876b24-84dd-4aff-9289-566a67c2bb1d",
+        "category": "general",
+        "feeRateBasisPoints": "100",
+        "grossAtomic": "1000000000000",
+        "keyVersion": "marketplace-live-v1",
+        "milestones": "[{\"milestoneId\":\"da3c55af-ef13-47f7-a5a9-0a5f35b31255\",\"taskId\":\"c0976786-3c64-42ff-ad93-fcc9ec4245f8\",\"ordinal\":1,\"title\":\"Submit the greeting\",\"amountAtomic\":\"1000000000000\",\"state\":\"PAID\",\"submissionId\":\"f84effc5-1b49-4ced-a824-0666fea7437f\",\"paymentRequirementId\":\"27c0674e-5c95-4825-bcbe-791507f4b8c1\",\"paidTransactionHash\":\"21ed86c8b8c01bee2a1369b51fc738d0302c87ea2dab59c90012bba6a67c62a2\",\"deliverable\":\"Submit one line of text in the Marketplace milestone: `Hello, world!`\",\"acceptanceTerms\":\"The submission contains the exact greeting `Hello, world!` as text.\",\"submissionHash\":\"3e0ba4a71461f67fabc1e7a3780730f67f64a5a6fd20c8e519a64d6c074cc449\",\"network\":\"atto:live\",\"senderAddress\":\"atto://admwwj2jaku4p6w773i6wlok3tywj63ub3pl2onsud24odaibhoyjhsju4hi6\",\"recipientAddress\":\"atto://abh64d54y7nfz7r6nxakelb7txrhjfe3tst75rvdvyu6cdcdrurne36fn5kv4\",\"refundPaymentRequirementId\":null,\"refundTransactionHash\":null}]",
+        "outcome": "ACCEPTED",
+        "publicationFeeAtomic": "10000000000",
+        "receiptId": "d8d8d156-1583-45ba-9e40-67e06058be2d",
+        "schema": "marketplace-work-receipt-v3",
+        "settledAt": "2026-11-23T14:01:46.629515Z",
+        "taskId": "c0976786-3c64-42ff-ad93-fcc9ec4245f8",
+        "workerAgentId": "d706e34a-0389-4fc2-9b08-3a28dfa05f25"
+      },
+      "canonicalBase64": "eyJhc3NldCI6IkFUVE8iLCJidXllckFnZW50SWQiOiI2NTg3NmIyNC04NGRkLTRhZmYtOTI4OS01NjZhNjdjMmJiMWQiLCJjYXRlZ29yeSI6ImdlbmVyYWwiLCJmZWVSYXRlQmFzaXNQb2ludHMiOiIxMDAiLCJncm9zc0F0b21pYyI6IjEwMDAwMDAwMDAwMDAiLCJrZXlWZXJzaW9uIjoibWFya2V0cGxhY2UtbGl2ZS12MSIsIm1pbGVzdG9uZXMiOiJbe1wibWlsZXN0b25lSWRcIjpcImRhM2M1NWFmLWVmMTMtNDdmNy1hNWE5LTBhNWYzNWIzMTI1NVwiLFwidGFza0lkXCI6XCJjMDk3Njc4Ni0zYzY0LTQyZmYtYWQ5My1mY2M5ZWM0MjQ1ZjhcIixcIm9yZGluYWxcIjoxLFwidGl0bGVcIjpcIlN1Ym1pdCB0aGUgZ3JlZXRpbmdcIixcImFtb3VudEF0b21pY1wiOlwiMTAwMDAwMDAwMDAwMFwiLFwic3RhdGVcIjpcIlBBSURcIixcInN1Ym1pc3Npb25JZFwiOlwiZjg0ZWZmYzUtMWI0OS00Y2VkLWE4MjQtMDY2NmZlYTc0MzdmXCIsXCJwYXltZW50UmVxdWlyZW1lbnRJZFwiOlwiMjdjMDY3NGUtNWM5NS00ODI1LWJjYmUtNzkxNTA3ZjRiOGMxXCIsXCJwYWlkVHJhbnNhY3Rpb25IYXNoXCI6XCIyMWVkODZjOGI4YzAxYmVlMmExMzY5YjUxZmM3MzhkMDMwMmM4N2VhMmRhYjU5YzkwMDEyYmJhNmE2N2M2MmEyXCIsXCJkZWxpdmVyYWJsZVwiOlwiU3VibWl0IG9uZSBsaW5lIG9mIHRleHQgaW4gdGhlIE1hcmtldHBsYWNlIG1pbGVzdG9uZTogYEhlbGxvLCB3b3JsZCFgXCIsXCJhY2NlcHRhbmNlVGVybXNcIjpcIlRoZSBzdWJtaXNzaW9uIGNvbnRhaW5zIHRoZSBleGFjdCBncmVldGluZyBgSGVsbG8sIHdvcmxkIWAgYXMgdGV4dC5cIixcInN1Ym1pc3Npb25IYXNoXCI6XCIzZTBiYTRhNzE0NjFmNjdmYWJjMWU3YTM3ODA3MzBmNjdmNjRhNWE2ZmQyMGM4ZTUxOWE2NGQ2YzA3NGNjNDQ5XCIsXCJuZXR3b3JrXCI6XCJhdHRvOmxpdmVcIixcInNlbmRlckFkZHJlc3NcIjpcImF0dG86Ly9hZG13d2oyamFrdTRwNnc3NzNpNndsb2szdHl3ajYzdWIzcGwyb25zdWQyNG9kYWliaG95amhzanU0aGk2XCIsXCJyZWNpcGllbnRBZGRyZXNzXCI6XCJhdHRvOi8vYWJoNjRkNTR5N25mejdyNm54YWtlbGI3dHhyaGpmZTN0c3Q3NXJ2ZHZ5dTZjZGNkcnVybmUzNmZuNWt2NFwiLFwicmVmdW5kUGF5bWVudFJlcXVpcmVtZW50SWRcIjpudWxsLFwicmVmdW5kVHJhbnNhY3Rpb25IYXNoXCI6bnVsbH1dIiwib3V0Y29tZSI6IkFDQ0VQVEVEIiwicHVibGljYXRpb25GZWVBdG9taWMiOiIxMDAwMDAwMDAwMCIsInJlY2VpcHRJZCI6ImQ4ZDhkMTU2LTE1ODMtNDViYS05ZTQwLTY3ZTA2MDU4YmUyZCIsInNjaGVtYSI6Im1hcmtldHBsYWNlLXdvcmstcmVjZWlwdC12MyIsInNldHRsZWRBdCI6IjIwMjYtMTEtMjNUMTQ6MDE6NDYuNjI5NTE1WiIsInRhc2tJZCI6ImMwOTc2Nzg2LTNjNjQtNDJmZi1hZDkzLWZjYzllYzQyNDVmOCIsIndvcmtlckFnZW50SWQiOiJkNzA2ZTM0YS0wMzg5LTRmYzItOWIwOC0zYTI4ZGZhMDVmMjUifQ==",
+      "contentSha256": "6d6683bcc01ef359d5855eaab136b67cd8bd98711dcb56c8f4ea61c83ec7c254",
+      "signatureBase64": "yF5KJbiIThnqVuaPPGi9JTCYaLHbeEoxyTaAhnhsdKTZ34M8r+6VUvGZ0YBIDMtyt3mvLQP2ECkzQQQzaJxiBw==",
+      "keyVersion": "marketplace-live-v1",
+      "paymentRequirementId": "27c0674e-5c95-4825-bcbe-791507f4b8c1",
+      "createdAt": "2026-11-23T14:01:46.629515Z"
+    },
+    "https://api.atto.market/v1/receipts/keys/marketplace-live-v1": {
+      "version": "marketplace-live-v1",
+      "algorithm": "Ed25519",
+      "publicKeyBase64": "MCowBQYDK2VwAyEA1Khua+ri3TdVEfr5+6TLbAglrg8L1C+DJoZoc+gazts="
+    },
+    "https://node-public.live.application.atto.cash/transactions/21ED86C8B8C01BEE2A1369B51FC738D0302C87EA2DAB59C90012BBA6A67C62A2": {
+      "block": {
+        "type": "SEND",
+        "network": "LIVE",
+        "version": 0,
+        "algorithm": "V1",
+        "publicKey": "D96B274902A9C7FADFFED1EB2DCADCF164FB740EDEBD39B2A0F5C70C0809DD84",
+        "height": 238,
+        "balance": 1312852358136388,
+        "timestamp": 1795442502220,
+        "previous": "F31B271A6CAFE17A39D5D48AF8D0B7D9947BB5AB20FC544B8990C312516FB422",
+        "receiverAlgorithm": "V1",
+        "receiverPublicKey": "4FEE0FBCC7DA5CFE3E6DC0A22C3F9DE274949B9CA7FEC6A3AE29E10C438D22D2",
+        "amount": 1000000000000,
+        "address": "atto://admwwj2jaku4p6w773i6wlok3tywj63ub3pl2onsud24odaibhoyjhsju4hi6",
+        "receiverAddress": "atto://abh64d54y7nfz7r6nxakelb7txrhjfe3tst75rvdvyu6cdcdrurne36fn5kv4"
+      },
+      "signature": "AFDDB858C8228F4484897569764635B6EA982C19FD48489CDDC39DF538040887C263F1C5824A7D137BA6AFE987103A610B7B6FE04A793522CCB9E6210DEF390E",
+      "work": "76A5675209CB9D41"
+    },
+    "https://node-public.live.application.atto.cash/transactions/F31B271A6CAFE17A39D5D48AF8D0B7D9947BB5AB20FC544B8990C312516FB422": {
+      "block": {
+        "type": "SEND",
+        "network": "LIVE",
+        "version": 0,
+        "algorithm": "V1",
+        "publicKey": "D96B274902A9C7FADFFED1EB2DCADCF164FB740EDEBD39B2A0F5C70C0809DD84",
+        "height": 237,
+        "balance": 1313852358136388,
+        "timestamp": 1795442388032,
+        "previous": "5913D58D17E8BAE321B26F2932D9AE207791F13504FD45C5E2D65AB407D427D0",
+        "receiverAlgorithm": "V1",
+        "receiverPublicKey": "1DC5D829A725AD3C14CDFC41F093FCC215E944A2D34F8D57F6FE58DCE0980890",
+        "amount": 1000000000000,
+        "address": "atto://admwwj2jaku4p6w773i6wlok3tywj63ub3pl2onsud24odaibhoyjhsju4hi6",
+        "receiverAddress": "atto://aao4lwbju4s22pauzx6ed4et7tbbl2keulju7dkx637frxhataejb7atylai2"
+      },
+      "signature": "503BBBBA5B21AB6F3160ED1AB2C9B1636B4CCBD468204391B161871BA181B40C116C1884202BB0FE385BFB2900A204CC729D0E087AF48CEF074600AD38F55209",
+      "work": "FCD57900DFD3C89C"
+    },
+    "https://node-public.live.application.atto.cash/transactions/C8A959499FAD9AA4D2539A26E52287B0C1A6A02AB71D946C98A52B6D92FC5BB8": {
+      "block": {
+        "type": "OPEN",
+        "network": "LIVE",
+        "version": 0,
+        "algorithm": "V1",
+        "publicKey": "4FEE0FBCC7DA5CFE3E6DC0A22C3F9DE274949B9CA7FEC6A3AE29E10C438D22D2",
+        "balance": 1000000000000,
+        "timestamp": 1795454739963,
+        "sendHashAlgorithm": "V1",
+        "sendHash": "21ED86C8B8C01BEE2A1369B51FC738D0302C87EA2DAB59C90012BBA6A67C62A2",
+        "representativeAlgorithm": "V1",
+        "representativePublicKey": "096523285E1FE5755DAABB94ECAB124D0E395E1D2E613E97D10AA2717B82A4CE",
+        "height": 1,
+        "address": "atto://abh64d54y7nfz7r6nxakelb7txrhjfe3tst75rvdvyu6cdcdrurne36fn5kv4",
+        "representativeAddress": "atto://aaewkizilyp6k5k5vk5zj3flcjgq4ok6duxgcpux2efke4l3qksm47mjnyqxk"
+      },
+      "signature": "2D2FE060C483E3D8441B8416BBF66723CF26D2F6177058684AC7BFCF44E1E7D206CCE73F99B7C7047074F201C3AD9FA0615FB3D6EF75B67BEF8927DDD68C1605",
+      "work": "D679BAE1724F8376"
+    }
+  }
+}
