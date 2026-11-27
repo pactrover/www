@@ -11,6 +11,8 @@ import unittest
 HERE = Path(__file__).resolve().parent
 VERIFY = HERE / 'verify.py'
 BUNDLE = HERE / 'hello-world-5.json'
+REPORT_BUNDLE = HERE / 'gta6-sentiment-report.json'
+REPORT_CASE = 'gta6-sentiment-report'
 SECOND_RPC = 'https://rpc.nano-gpt.com'
 SEND_HASH = '46A52556441A42270EFFF7FFA7829A0A3A92AC41305199DE3AF8C5A8E65F1780'
 BLOCKED = 'offline replay attempted Python networking'
@@ -42,8 +44,8 @@ class ReplayTest(unittest.TestCase):
             raise RuntimeError('Set NANO_VERIFY_LIB to the trusted shared library built in README.md')
         cls.lib = Path(lib).resolve()
 
-    def replay(self, path):
-        result = audited_python(VERIFY, '--nano-lib', self.lib, '--evidence-file', path, '--tamper-checks')
+    def replay(self, path, *args):
+        result = audited_python(VERIFY, '--nano-lib', self.lib, '--evidence-file', path, '--tamper-checks', *args)
         self.assertNotIn(BLOCKED, result.stderr)
         return result
 
@@ -89,6 +91,34 @@ class ReplayTest(unittest.TestCase):
             'changed sender predecessor signature', 'changed RECEIVE signature',
             'changed recipient predecessor signature', 'wrong receipt-to-SEND link',
         ])
+
+    def test_report_receipt_and_native_credit(self):
+        result = self.replay(REPORT_BUNDLE, '--case', REPORT_CASE)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stderr, '')
+        proof = json.loads(result.stdout)
+        self.assertEqual(proof['evidenceMode'], 'offline')
+        self.assertEqual(proof['receiptId'], '5abec799-04ef-4877-a21f-78a69e2c1d07')
+        self.assertEqual(proof['marketplaceSettledAt'], '2026-11-25T13:08:56.783314Z')
+        self.assertIs(proof['marketplaceSignatureVerified'], True)
+        self.assertEqual(proof['sendHash'], '40E788B61DC493DB5D77A1986D34ABFEEB0AA7C953696F8C5B1E0DD5FD5FA6B5')
+        self.assertEqual(proof['receiveHash'], '4C5EA73D554D4B50F79D0C2A32D59C8DE252BEE85F584CEF8846BB48F4431C6D')
+        self.assertEqual(proof['workerCreditRaw'], '1000000000000000000000000000000')
+        self.assertEqual(proof['senderDebitRaw'], proof['workerCreditRaw'])
+        self.assertEqual(proof['workerCreditXNO'], '1')
+        self.assertEqual(proof['stateBlockHashesRecomputed'], 4)
+        self.assertEqual(proof['nativeSignaturesVerified'], 4)
+        self.assertIs(proof['confirmedReported'], True)
+        self.assertIs(proof['representativeVotesChecked'], False)
+        self.assertEqual(len(proof['negativeChecks']), 7)
+
+    def test_bundles_cannot_be_swapped_between_cases(self):
+        for bundle, args in ((BUNDLE, ('--case', REPORT_CASE)), (REPORT_BUNDLE, ())):
+            with self.subTest(bundle=bundle.name):
+                result = self.replay(bundle, *args)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertEqual(result.stdout, '')
+                self.assertIn('unexpected Marketplace evidence source', result.stderr)
 
     def test_missing_saved_rpc_does_not_fall_back(self):
         self.check_mutation(lambda data: data['rpcBlocks'].pop(SECOND_RPC),

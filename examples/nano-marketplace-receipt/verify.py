@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Read-only live or offline check for the public Atto Marketplace Hello World #5 receipt.
+"""Read-only live or offline checks for two fixed Atto Marketplace Nano receipts.
 
 Requires Python 3.11+, OpenSSL 3, and a locally built Nano signature library.
-Checks one fixed case; relies on RPC confirmation reports, not vote validation.
+Relies on RPC confirmation reports, not vote validation.
 """
 import argparse
 import base64
@@ -15,29 +15,53 @@ from pathlib import Path
 import re
 import subprocess
 import tempfile
+from typing import NamedTuple
 
 from urllib.parse import urlencode
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 API = 'https://api.atto.market'
-TASK = 'e61c0cc0-641d-4414-ae76-9239dceff016'
 RPCS = ('https://rpc.nano.to', 'https://rpc.nano-gpt.com')
 VERSION = 'marketplace-live-v1'
 SCHEMA = 'marketplace-work-receipt-v3'
 EVIDENCE_FORMAT = 'pactrover-nano-marketplace-evidence-v1'
 OFFLINE_KEY_SHA256 = '2ae2560719df3f6c3a0f4ee74766ea4d14283ac674a321bde16359ecad03ce45'
-QUERY = urlencode({'state': 'COMPLETED', 'asset': 'XNO', 'q': 'Hello World #5', 'limit': 20})
-HISTORY_URL = f'{API}/v1/discovery/task-history?{QUERY}'
-RECEIPT_URL = f'{API}/v1/tasks/{TASK}/receipt'
 KEY_URL = f'{API}/v1/receipts/keys/{VERSION}'
 ALPHABET = '13456789abcdefghijkmnopqrstuwxyz'
-AMOUNT = 125 * 10**27
-HASHES = (
-    '46A52556441A42270EFFF7FFA7829A0A3A92AC41305199DE3AF8C5A8E65F1780',  # SEND
-    '89F05620E0CBFEACF24DBC64241A6B20B598C07E8E039BE239955171BE35B0FE',  # sender predecessor
-    'E50C8EEFDD60CCD4F931D2028F228AC29FEA7CB1C3B8308C922EDB4994ED43F1',  # RECEIVE
-    '6DF2FF052F3E8ED59301CE1A1C475B367D571F3698886B0F3FDFAA5BCA1D619B',  # recipient predecessor
-)
+
+
+class Case(NamedTuple):
+    task: str
+    query: str
+    amount: int
+    hashes: tuple[str, str, str, str]
+
+    @property
+    def history_url(self):
+        query = urlencode({'state': 'COMPLETED', 'asset': 'XNO', 'q': self.query, 'limit': 20})
+        return f'{API}/v1/discovery/task-history?{query}'
+
+    @property
+    def receipt_url(self):
+        return f'{API}/v1/tasks/{self.task}/receipt'
+
+
+DEFAULT_CASE = 'hello-world-5'
+CASES = {
+    # Hash order: SEND, sender predecessor, RECEIVE, recipient predecessor.
+    DEFAULT_CASE: Case('e61c0cc0-641d-4414-ae76-9239dceff016', 'Hello World #5', 125 * 10**27, (
+        '46A52556441A42270EFFF7FFA7829A0A3A92AC41305199DE3AF8C5A8E65F1780',
+        '89F05620E0CBFEACF24DBC64241A6B20B598C07E8E039BE239955171BE35B0FE',
+        'E50C8EEFDD60CCD4F931D2028F228AC29FEA7CB1C3B8308C922EDB4994ED43F1',
+        '6DF2FF052F3E8ED59301CE1A1C475B367D571F3698886B0F3FDFAA5BCA1D619B',
+    )),
+    'gta6-sentiment-report': Case('a6411b89-dce5-4a17-9b17-279bc037183b', 'Reddit sentiment analysis', 10**30, (
+        '40E788B61DC493DB5D77A1986D34ABFEEB0AA7C953696F8C5B1E0DD5FD5FA6B5',
+        '169B90D3B374E6008F097830364BFF1B44BF8C12D1009B0DC164700622E908F2',
+        '4C5EA73D554D4B50F79D0C2A32D59C8DE252BEE85F584CEF8846BB48F4431C6D',
+        '8C9F2043C8245BA58B2EFD5C0197049A27F1A0946E161D6BF0FD028E278F7787',
+    )),
+}
 
 
 def require(test, message):
@@ -97,21 +121,21 @@ def account_key(address):
     return key
 
 
-def verify_receipt(row, envelope, key):
+def verify_receipt(case, row, envelope, key):
     task, summary = row['task'], row['receipt']
     canonical = base64.b64decode(envelope['canonicalBase64'], validate=True)
     digest = hashlib.sha256(canonical).digest()
     require(digest == hex32(envelope['contentSha256']), 'receipt digest mismatch')
     c = parse(canonical)
     require(c == envelope['content'] and c['schema'] == SCHEMA, 'receipt projection mismatch')
-    require(c['taskId'] == envelope['taskId'] == task['taskId'] == TASK
+    require(c['taskId'] == envelope['taskId'] == task['taskId'] == case.task
             and task['state'] == 'COMPLETED'
             and c['receiptId'] == envelope['receiptId'] == summary['receiptId']
             and c['outcome'] == envelope['outcome'] == summary['outcome'] == 'ACCEPTED'
             and c['settledAt'] == envelope['createdAt'] == summary['createdAt'], 'receipt/history binding mismatch')
     require(c['buyerAgentId'] == task['requesterAgentId'] and c['workerAgentId'] == row['worker']['agentId']
             and c['asset'] == task['asset'] == 'XNO'
-            and integer(c['grossAtomic']) == integer(task['grossAtomic']) == AMOUNT
+            and integer(c['grossAtomic']) == integer(task['grossAtomic']) == case.amount
             and integer(c['publicationFeeAtomic']) == integer(task['feeAtomic'])
             and integer(c['feeRateBasisPoints']) == task['feeRateBasisPoints'], 'receipt/history field mismatch')
     require(c['keyVersion'] == envelope['keyVersion'] == key['version'] == VERSION
@@ -127,16 +151,16 @@ def verify_receipt(row, envelope, key):
                             '-rawin','-in','msg','-sigfile','sig'], cwd=d, capture_output=True, timeout=8)
         require(p.returncode == 0, 'Marketplace signature verification failed')
     m, = parse(c['milestones'])
-    require(m['taskId'] == TASK and m['ordinal'] == 1 and m['state'] == 'PAID' and m['network'] == 'nano:mainnet'
+    require(m['taskId'] == case.task and m['ordinal'] == 1 and m['state'] == 'PAID' and m['network'] == 'nano:mainnet'
             and m['paymentRequirementId'] == envelope['paymentRequirementId']
-            and m['refundTransactionHash'] is None and integer(m['amountAtomic']) == AMOUNT, 'unexpected milestone')
+            and m['refundTransactionHash'] is None and integer(m['amountAtomic']) == case.amount, 'unexpected milestone')
     hex32(m['submissionHash'])
     return c, m
 
 
-def blocks(host):
-    result = request(host, {'action': 'blocks_info', 'hashes': HASHES, 'json_block': 'true', 'receive_hash': 'true'})
-    require(set(result['blocks']) == set(HASHES), 'Nano RPC returned missing or unrelated blocks')
+def blocks(host, hashes):
+    result = request(host, {'action': 'blocks_info', 'hashes': hashes, 'json_block': 'true', 'receive_hash': 'true'})
+    require(set(result['blocks']) == set(hashes), 'Nano RPC returned missing or unrelated blocks')
     return result['blocks']
 
 
@@ -168,21 +192,21 @@ def change(current, prior, a, b):
     return integer(a['balance']) - integer(b['balance'])
 
 
-def check_nano(entries, m, native_verify):
-    send_hash, sp, receive_hash, rp = HASHES
+def check_nano(case, entries, m, native_verify):
+    send_hash, sp, receive_hash, rp = case.hashes
     require(hex32(m['paidTransactionHash']) == hex32(send_hash), 'signed receipt names a different SEND')
-    s, s0, r, r0 = (entries[h] for h in HASHES)
-    a, a0, b, b0 = (verify_block(entries[h], h, native_verify) for h in HASHES)
+    s, s0, r, r0 = (entries[h] for h in case.hashes)
+    a, a0, b, b0 = (verify_block(entries[h], h, native_verify) for h in case.hashes)
     require(s['subtype'] == 'send' and a['account'] == m['senderAddress']
             and hex32(a['link']) == account_key(m['recipientAddress']), 'SEND destination mismatch')
     require(r['subtype'] == 'receive' and b['account'] == m['recipientAddress']
             and hex32(b['link']) == hex32(send_hash), 'RECEIVE source mismatch')
     require(hex32(s['receive_hash']) == hex32(receive_hash), 'RPC reports a different RECEIVE')
     require(hex32(a['previous']) == hex32(sp) and hex32(b['previous']) == hex32(rp), 'predecessor hash mismatch')
-    require(-change(s, s0, a, a0) == change(r, r0, b, b0) == integer(s['amount']) == integer(r['amount']) == AMOUNT,
+    require(-change(s, s0, a, a0) == change(r, r0, b, b0) == integer(s['amount']) == integer(r['amount']) == case.amount,
             'worker credit or sender debit mismatch')
     return {'sendHash': send_hash, 'sendPrevious': sp, 'receiveHash': receive_hash, 'receivePrevious': rp,
-            'senderDebitRaw': str(AMOUNT), 'workerCreditRaw': str(AMOUNT), 'confirmedReported': True,
+            'senderDebitRaw': str(case.amount), 'workerCreditRaw': str(case.amount), 'confirmedReported': True,
             'stateBlockHashesRecomputed': 4, 'nativeSignaturesVerified': 4}
 
 
@@ -195,17 +219,17 @@ def rejected(label, message, fn, *args):
     raise ValueError(f'negative check accepted: {label}')
 
 
-def load_evidence(path):
+def load_evidence(case, path):
     with path.open('rb') as f:
         data = f.read(512_001)
     require(len(data) <= 512_000, 'oversized evidence file')
     obj = parse(data)
     require(obj['format'] == EVIDENCE_FORMAT, 'unexpected evidence format')
-    require(obj['history']['url'] == HISTORY_URL and obj['receipt']['url'] == RECEIPT_URL
+    require(obj['history']['url'] == case.history_url and obj['receipt']['url'] == case.receipt_url
             and obj['key']['url'] == KEY_URL, 'unexpected Marketplace evidence source')
     rpc_blocks = obj['rpcBlocks']
     require(set(rpc_blocks) == set(RPCS), 'missing or unexpected Nano RPC evidence source')
-    require(all(set(rpc_blocks[host]) == set(HASHES) for host in RPCS),
+    require(all(set(rpc_blocks[host]) == set(case.hashes) for host in RPCS),
             'missing or unrelated saved blocks')
     key = obj['key']['body']
     der = base64.b64decode(key['publicKeyBase64'], validate=True)
@@ -218,32 +242,34 @@ def load_evidence(path):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--case', choices=CASES, default=DEFAULT_CASE, help='fixed receipt to verify (default: %(default)s)')
     parser.add_argument('--nano-lib', required=True, type=Path, help='trusted locally built shared library')
     parser.add_argument('--tamper-checks', action='store_true', help='run negative checks in memory')
     parser.add_argument('--evidence-file', type=Path, help='replay a saved case without HTTP lookups')
     args = parser.parse_args()
+    case = CASES[args.case]
     lib = ctypes.CDLL(str(args.nano_lib.resolve(strict=True)))
     native_verify = lib.ed25519_sign_open
     native_verify.argtypes = (ctypes.c_char_p, ctypes.c_size_t, ctypes.c_char_p, ctypes.c_char_p)
     native_verify.restype = ctypes.c_int
     if args.evidence_file:
-        row, envelope, key, fetched, observed_at = load_evidence(args.evidence_file)
-        c, m = verify_receipt(row, envelope, key)
+        row, envelope, key, fetched, observed_at = load_evidence(case, args.evidence_file)
+        c, m = verify_receipt(case, row, envelope, key)
         mode = 'offline'
     else:
-        rows = request(HISTORY_URL)['items']
-        row, = (item for item in rows if item['task']['taskId'] == TASK)
-        envelope = request(RECEIPT_URL)
+        rows = request(case.history_url)['items']
+        row, = (item for item in rows if item['task']['taskId'] == case.task)
+        envelope = request(case.receipt_url)
         key = request(KEY_URL)
-        c, m = verify_receipt(row, envelope, key)
-        fetched = [blocks(host) for host in RPCS]
+        c, m = verify_receipt(case, row, envelope, key)
+        fetched = [blocks(host, case.hashes) for host in RPCS]
         observed_at = datetime.now(UTC).isoformat()
         mode = 'live'
-    one, two = (check_nano(entries, m, native_verify) for entries in fetched)
+    one, two = (check_nano(case, entries, m, native_verify) for entries in fetched)
     require(one == two, 'two RPC results disagree')
     negatives = []
     if args.tamper_checks:
-        h = HASHES[0]
+        h = case.hashes[0]
         original = fetched[0][h]
         changed = deepcopy(original)
         changed['contents']['balance'] = str(integer(original['contents']['balance']) + 1)
@@ -252,23 +278,25 @@ def main():
         sig = bytearray(base64.b64decode(envelope['signatureBase64'], validate=True))
         sig[0] ^= 1
         negatives.append(rejected('changed Marketplace signature', 'Marketplace signature verification failed',
-                                  verify_receipt, row,
+                                  verify_receipt, case, row,
                                   dict(envelope, signatureBase64=base64.b64encode(sig).decode()), key))
-        for label, h in zip(('SEND', 'sender predecessor', 'RECEIVE', 'recipient predecessor'), HASHES):
+        for label, h in zip(('SEND', 'sender predecessor', 'RECEIVE', 'recipient predecessor'), case.hashes):
             changed = deepcopy(fetched[0][h])
             sig = bytearray.fromhex(changed['contents']['signature'])
             sig[0] ^= 1
             changed['contents']['signature'] = sig.hex()
             negatives.append(rejected(f'changed {label} signature', 'Nano signature verification failed',
                                       verify_block, changed, h, native_verify))
-        wrong = dict(m, paidTransactionHash=HASHES[2])
+        wrong = dict(m, paidTransactionHash=case.hashes[2])
         negatives.append(rejected('wrong receipt-to-SEND link', 'signed receipt names a different SEND',
-                                  check_nano, fetched[0], wrong, native_verify))
+                                  check_nano, case, fetched[0], wrong, native_verify))
+    whole, fraction = divmod(integer(one['workerCreditRaw']), 10**30)
+    credit = f'{whole}.{fraction:030d}'.rstrip('0').rstrip('.')
     print(json.dumps({'observedAtUtc': observed_at, 'evidenceMode': mode,
-                      'receiptUrl': RECEIPT_URL, 'receiptId': c['receiptId'],
+                      'receiptUrl': case.receipt_url, 'receiptId': c['receiptId'],
                       'keyVersion': VERSION, 'marketplaceSettledAt': c['settledAt'],
                       'marketplaceSignatureVerified': True, 'nanoRpcEndpoints': RPCS, **one,
-                      'workerCreditXNO': '0.125',
+                      'workerCreditXNO': credit,
                       'representativeVotesChecked': False, 'negativeChecks': negatives}, indent=2))
 
 

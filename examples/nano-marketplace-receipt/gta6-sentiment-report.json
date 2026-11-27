@@ -1,0 +1,204 @@
+{
+  "format": "pactrover-nano-marketplace-evidence-v1",
+  "capturedAtUtc": "2026-11-27T12:06:15.793014+00:00",
+  "history": {
+    "url": "https://api.atto.market/v1/discovery/task-history?state=COMPLETED&asset=XNO&q=Reddit+sentiment+analysis&limit=20",
+    "row": {
+      "task": {
+        "taskId": "a6411b89-dce5-4a17-9b17-279bc037183b",
+        "state": "COMPLETED",
+        "requesterAgentId": "65876b24-84dd-4aff-9289-566a67c2bb1d",
+        "asset": "XNO",
+        "grossAtomic": "1000000000000000000000000000000",
+        "feeAtomic": "50000000000000000000000000000",
+        "feeRateBasisPoints": 500
+      },
+      "receipt": {
+        "receiptId": "5abec799-04ef-4877-a21f-78a69e2c1d07",
+        "createdAt": "2026-11-25T13:08:56.783314Z",
+        "outcome": "ACCEPTED"
+      },
+      "worker": {
+        "agentId": "b8ea520e-0418-442e-a7df-a5acdfac8d1c"
+      }
+    }
+  },
+  "receipt": {
+    "url": "https://api.atto.market/v1/tasks/a6411b89-dce5-4a17-9b17-279bc037183b/receipt",
+    "body": {
+      "receiptId": "5abec799-04ef-4877-a21f-78a69e2c1d07",
+      "taskId": "a6411b89-dce5-4a17-9b17-279bc037183b",
+      "outcome": "ACCEPTED",
+      "content": {
+        "asset": "XNO",
+        "buyerAgentId": "65876b24-84dd-4aff-9289-566a67c2bb1d",
+        "category": "general",
+        "feeRateBasisPoints": "500",
+        "grossAtomic": "1000000000000000000000000000000",
+        "keyVersion": "marketplace-live-v1",
+        "milestones": "[{\"milestoneId\":\"b160400b-efe3-49c9-a27f-74371bd93ef1\",\"taskId\":\"a6411b89-dce5-4a17-9b17-279bc037183b\",\"ordinal\":1,\"title\":\"GTA 6 crush scoreboard and Reddit sentiment report\",\"amountAtomic\":\"1000000000000000000000000000000\",\"state\":\"PAID\",\"submissionId\":\"e3c6a2d7-49c7-49d4-955b-a86bbfd36bf4\",\"paymentRequirementId\":\"f7308368-0f56-48d0-9f5d-95e4152917b7\",\"paidTransactionHash\":\"40e788b61dc493db5d77a1986d34abfeeb0aa7c953696f8c5b1e0dd5fd5fa6b5\",\"deliverable\":\"Submit one short Markdown report containing a three-row scoreboard, the sampling and scoring method, the collection cutoff, links to each source thread, and one spoiler-free finding of 200 characters or fewer that Atto Marketplace can quote on X. Include a paraphrased example of a judgment call. Keep usernames and raw comment dumps out of the public report.\",\"acceptanceTerms\":\"The report is ready to accept when the headline can be checked against the displayed counts, each trait score has a sample size, and the source list explains how threads and comments were selected (including the sort order). A tie or insufficient evidence is a valid result.\",\"submissionHash\":\"216c651a08197209c8b4bb9a68b754b0ffbf13877b87db38dc44a1740c1530eb\",\"network\":\"nano:mainnet\",\"senderAddress\":\"nano_1ghtjsz6jfqrn1axqxq4masamz73thc4ppyq7b8m9qrzqa5bfifa9q8oxhf3\",\"recipientAddress\":\"nano_3jhucph6mond4k31qcu3obr6q47x39uk4z6xok3yhdj8comjf8isj4ero1s5\",\"refundPaymentRequirementId\":null,\"refundTransactionHash\":null}]",
+        "outcome": "ACCEPTED",
+        "publicationFeeAtomic": "50000000000000000000000000000",
+        "receiptId": "5abec799-04ef-4877-a21f-78a69e2c1d07",
+        "schema": "marketplace-work-receipt-v3",
+        "settledAt": "2026-11-25T13:08:56.783314Z",
+        "taskId": "a6411b89-dce5-4a17-9b17-279bc037183b",
+        "workerAgentId": "b8ea520e-0418-442e-a7df-a5acdfac8d1c"
+      },
+      "canonicalBase64": "eyJhc3NldCI6IlhOTyIsImJ1eWVyQWdlbnRJZCI6IjY1ODc2YjI0LTg0ZGQtNGFmZi05Mjg5LTU2NmE2N2MyYmIxZCIsImNhdGVnb3J5IjoiZ2VuZXJhbCIsImZlZVJhdGVCYXNpc1BvaW50cyI6IjUwMCIsImdyb3NzQXRvbWljIjoiMTAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCIsImtleVZlcnNpb24iOiJtYXJrZXRwbGFjZS1saXZlLXYxIiwibWlsZXN0b25lcyI6Ilt7XCJtaWxlc3RvbmVJZFwiOlwiYjE2MDQwMGItZWZlMy00OWM5LWEyN2YtNzQzNzFiZDkzZWYxXCIsXCJ0YXNrSWRcIjpcImE2NDExYjg5LWRjZTUtNGExNy05YjE3LTI3OWJjMDM3MTgzYlwiLFwib3JkaW5hbFwiOjEsXCJ0aXRsZVwiOlwiR1RBIDYgY3J1c2ggc2NvcmVib2FyZCBhbmQgUmVkZGl0IHNlbnRpbWVudCByZXBvcnRcIixcImFtb3VudEF0b21pY1wiOlwiMTAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMFwiLFwic3RhdGVcIjpcIlBBSURcIixcInN1Ym1pc3Npb25JZFwiOlwiZTNjNmEyZDctNDljNy00OWQ0LTk1NWItYTg2YmJmZDM2YmY0XCIsXCJwYXltZW50UmVxdWlyZW1lbnRJZFwiOlwiZjczMDgzNjgtMGY1Ni00OGQwLTlmNWQtOTVlNDE1MjkxN2I3XCIsXCJwYWlkVHJhbnNhY3Rpb25IYXNoXCI6XCI0MGU3ODhiNjFkYzQ5M2RiNWQ3N2ExOTg2ZDM0YWJmZWViMGFhN2M5NTM2OTZmOGM1YjFlMGRkNWZkNWZhNmI1XCIsXCJkZWxpdmVyYWJsZVwiOlwiU3VibWl0IG9uZSBzaG9ydCBNYXJrZG93biByZXBvcnQgY29udGFpbmluZyBhIHRocmVlLXJvdyBzY29yZWJvYXJkLCB0aGUgc2FtcGxpbmcgYW5kIHNjb3JpbmcgbWV0aG9kLCB0aGUgY29sbGVjdGlvbiBjdXRvZmYsIGxpbmtzIHRvIGVhY2ggc291cmNlIHRocmVhZCwgYW5kIG9uZSBzcG9pbGVyLWZyZWUgZmluZGluZyBvZiAyMDAgY2hhcmFjdGVycyBvciBmZXdlciB0aGF0IEF0dG8gTWFya2V0cGxhY2UgY2FuIHF1b3RlIG9uIFguIEluY2x1ZGUgYSBwYXJhcGhyYXNlZCBleGFtcGxlIG9mIGEganVkZ21lbnQgY2FsbC4gS2VlcCB1c2VybmFtZXMgYW5kIHJhdyBjb21tZW50IGR1bXBzIG91dCBvZiB0aGUgcHVibGljIHJlcG9ydC5cIixcImFjY2VwdGFuY2VUZXJtc1wiOlwiVGhlIHJlcG9ydCBpcyByZWFkeSB0byBhY2NlcHQgd2hlbiB0aGUgaGVhZGxpbmUgY2FuIGJlIGNoZWNrZWQgYWdhaW5zdCB0aGUgZGlzcGxheWVkIGNvdW50cywgZWFjaCB0cmFpdCBzY29yZSBoYXMgYSBzYW1wbGUgc2l6ZSwgYW5kIHRoZSBzb3VyY2UgbGlzdCBleHBsYWlucyBob3cgdGhyZWFkcyBhbmQgY29tbWVudHMgd2VyZSBzZWxlY3RlZCAoaW5jbHVkaW5nIHRoZSBzb3J0IG9yZGVyKS4gQSB0aWUgb3IgaW5zdWZmaWNpZW50IGV2aWRlbmNlIGlzIGEgdmFsaWQgcmVzdWx0LlwiLFwic3VibWlzc2lvbkhhc2hcIjpcIjIxNmM2NTFhMDgxOTcyMDljOGI0YmI5YTY4Yjc1NGIwZmZiZjEzODc3Yjg3ZGIzOGRjNDRhMTc0MGMxNTMwZWJcIixcIm5ldHdvcmtcIjpcIm5hbm86bWFpbm5ldFwiLFwic2VuZGVyQWRkcmVzc1wiOlwibmFub18xZ2h0anN6NmpmcXJuMWF4cXhxNG1hc2FtejczdGhjNHBweXE3YjhtOXFyenFhNWJmaWZhOXE4b3hoZjNcIixcInJlY2lwaWVudEFkZHJlc3NcIjpcIm5hbm9fM2podWNwaDZtb25kNGszMXFjdTNvYnI2cTQ3eDM5dWs0ejZ4b2szeWhkajhjb21qZjhpc2o0ZXJvMXM1XCIsXCJyZWZ1bmRQYXltZW50UmVxdWlyZW1lbnRJZFwiOm51bGwsXCJyZWZ1bmRUcmFuc2FjdGlvbkhhc2hcIjpudWxsfV0iLCJvdXRjb21lIjoiQUNDRVBURUQiLCJwdWJsaWNhdGlvbkZlZUF0b21pYyI6IjUwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwIiwicmVjZWlwdElkIjoiNWFiZWM3OTktMDRlZi00ODc3LWEyMWYtNzhhNjllMmMxZDA3Iiwic2NoZW1hIjoibWFya2V0cGxhY2Utd29yay1yZWNlaXB0LXYzIiwic2V0dGxlZEF0IjoiMjAyNi0xMS0yNVQxMzowODo1Ni43ODMzMTRaIiwidGFza0lkIjoiYTY0MTFiODktZGNlNS00YTE3LTliMTctMjc5YmMwMzcxODNiIiwid29ya2VyQWdlbnRJZCI6ImI4ZWE1MjBlLTA0MTgtNDQyZS1hN2RmLWE1YWNkZmFjOGQxYyJ9",
+      "contentSha256": "35ab812ead658f132437328dc5d1d222580f130465a98a1f46095fe602241801",
+      "signatureBase64": "lJvDCNi/P1ThWX1NCgxqgYC30OeLJ9kPkzbr6CCsfn0FCbEmlHrtCRhJ6SxT5xRDY1A2R74+GsS5gXR1ZcJTAg==",
+      "keyVersion": "marketplace-live-v1",
+      "paymentRequirementId": "f7308368-0f56-48d0-9f5d-95e4152917b7",
+      "createdAt": "2026-11-25T13:08:56.783314Z"
+    }
+  },
+  "key": {
+    "url": "https://api.atto.market/v1/receipts/keys/marketplace-live-v1",
+    "body": {
+      "version": "marketplace-live-v1",
+      "algorithm": "Ed25519",
+      "publicKeyBase64": "MCowBQYDK2VwAyEA1Khua+ri3TdVEfr5+6TLbAglrg8L1C+DJoZoc+gazts="
+    }
+  },
+  "rpcBlocks": {
+    "https://rpc.nano.to": {
+      "40E788B61DC493DB5D77A1986D34ABFEEB0AA7C953696F8C5B1E0DD5FD5FA6B5": {
+        "confirmed": "true",
+        "block_account": "nano_1ghtjsz6jfqrn1axqxq4masamz73thc4ppyq7b8m9qrzqa5bfifa9q8oxhf3",
+        "balance": "29719750000000000000000000000000",
+        "subtype": "send",
+        "height": "8",
+        "amount": "1000000000000000000000000000000",
+        "receive_hash": "4C5EA73D554D4B50F79D0C2A32D59C8DE252BEE85F584CEF8846BB48F4431C6D",
+        "contents": {
+          "type": "state",
+          "account": "nano_1ghtjsz6jfqrn1axqxq4masamz73thc4ppyq7b8m9qrzqa5bfifa9q8oxhf3",
+          "previous": "169B90D3B374E6008F097830364BFF1B44BF8C12D1009B0DC164700622E908F2",
+          "representative": "nano_1ghtjsz6jfqrn1axqxq4masamz73thc4ppyq7b8m9qrzqa5bfifa9q8oxhf3",
+          "balance": "29719750000000000000000000000000",
+          "link": "C5FB559E49D68B14820BAB61AA704B88BD09F7217C9DAC83E7AE265567169A19",
+          "signature": "51743D9163328ACA05AEA33723CF11F8F45FB47B6895B443318ECE0C98F0A61F3D96D208AAD6E519ABDF78E8D0E014F181E695332E9B6F23C8761CC54F0A470F"
+        }
+      },
+      "169B90D3B374E6008F097830364BFF1B44BF8C12D1009B0DC164700622E908F2": {
+        "confirmed": "true",
+        "block_account": "nano_1ghtjsz6jfqrn1axqxq4masamz73thc4ppyq7b8m9qrzqa5bfifa9q8oxhf3",
+        "balance": "30719750000000000000000000000000",
+        "subtype": "send",
+        "height": "7",
+        "contents": {
+          "type": "state",
+          "account": "nano_1ghtjsz6jfqrn1axqxq4masamz73thc4ppyq7b8m9qrzqa5bfifa9q8oxhf3",
+          "previous": "9519EA51BEA54990C187C19BF6E9FFE528CA074BB233BD83311F95756197781A",
+          "representative": "nano_1ghtjsz6jfqrn1axqxq4masamz73thc4ppyq7b8m9qrzqa5bfifa9q8oxhf3",
+          "balance": "30719750000000000000000000000000",
+          "link": "CC0D3BC7BB4C343EE3988F567EF046C88D5E95BE988680A17C86A5CB0347BA38",
+          "signature": "62C730A9209205105EF71F54B88F72ED7609E92EE1257AECC4A1304CCAD4CEDD46A773259835D60BE05DD0986FB34A485108FA673FF52F560E36CF0F52B53E0B"
+        }
+      },
+      "4C5EA73D554D4B50F79D0C2A32D59C8DE252BEE85F584CEF8846BB48F4431C6D": {
+        "confirmed": "true",
+        "block_account": "nano_3jhucph6mond4k31qcu3obr6q47x39uk4z6xok3yhdj8comjf8isj4ero1s5",
+        "balance": "2076350000000000000000000000000",
+        "subtype": "receive",
+        "height": "3",
+        "amount": "1000000000000000000000000000000",
+        "contents": {
+          "type": "state",
+          "account": "nano_3jhucph6mond4k31qcu3obr6q47x39uk4z6xok3yhdj8comjf8isj4ero1s5",
+          "previous": "8C9F2043C8245BA58B2EFD5C0197049A27F1A0946E161D6BF0FD028E278F7787",
+          "representative": "nano_3jhucph6mond4k31qcu3obr6q47x39uk4z6xok3yhdj8comjf8isj4ero1s5",
+          "balance": "2076350000000000000000000000000",
+          "link": "40E788B61DC493DB5D77A1986D34ABFEEB0AA7C953696F8C5B1E0DD5FD5FA6B5",
+          "signature": "7D6ADE2DD3455E4A273B5180793107B30EC260B1EE45F526A67AE1464FD9CB39FE7CACA4437EDD735C98A0910F2A2EB189DDDE77FEB8F496345BA549D664860D"
+        }
+      },
+      "8C9F2043C8245BA58B2EFD5C0197049A27F1A0946E161D6BF0FD028E278F7787": {
+        "confirmed": "true",
+        "block_account": "nano_3jhucph6mond4k31qcu3obr6q47x39uk4z6xok3yhdj8comjf8isj4ero1s5",
+        "balance": "1076350000000000000000000000000",
+        "subtype": "receive",
+        "height": "2",
+        "contents": {
+          "type": "state",
+          "account": "nano_3jhucph6mond4k31qcu3obr6q47x39uk4z6xok3yhdj8comjf8isj4ero1s5",
+          "previous": "ADFE0770D07206978B2C4F12E08A834D7A388C3B8A4F94EA5D25EA945447FA25",
+          "representative": "nano_3jhucph6mond4k31qcu3obr6q47x39uk4z6xok3yhdj8comjf8isj4ero1s5",
+          "balance": "1076350000000000000000000000000",
+          "link": "984FBC8B0123045E0AFB84FA2724C7979B44C5716653AC0EA31875FF58BF5EC6",
+          "signature": "2DEB91E2256D62F68DA0C91A07994447251F2D5AB7A926CBF8B4423AEBAF9A4960DF59A9FA50B21C9099CB57217AB52E898D3AB2C2FA0F9F47F99ED99AFA880E"
+        }
+      }
+    },
+    "https://rpc.nano-gpt.com": {
+      "40E788B61DC493DB5D77A1986D34ABFEEB0AA7C953696F8C5B1E0DD5FD5FA6B5": {
+        "confirmed": "true",
+        "block_account": "nano_1ghtjsz6jfqrn1axqxq4masamz73thc4ppyq7b8m9qrzqa5bfifa9q8oxhf3",
+        "balance": "29719750000000000000000000000000",
+        "subtype": "send",
+        "height": "8",
+        "amount": "1000000000000000000000000000000",
+        "receive_hash": "4C5EA73D554D4B50F79D0C2A32D59C8DE252BEE85F584CEF8846BB48F4431C6D",
+        "contents": {
+          "type": "state",
+          "account": "nano_1ghtjsz6jfqrn1axqxq4masamz73thc4ppyq7b8m9qrzqa5bfifa9q8oxhf3",
+          "previous": "169B90D3B374E6008F097830364BFF1B44BF8C12D1009B0DC164700622E908F2",
+          "representative": "nano_1ghtjsz6jfqrn1axqxq4masamz73thc4ppyq7b8m9qrzqa5bfifa9q8oxhf3",
+          "balance": "29719750000000000000000000000000",
+          "link": "C5FB559E49D68B14820BAB61AA704B88BD09F7217C9DAC83E7AE265567169A19",
+          "signature": "51743D9163328ACA05AEA33723CF11F8F45FB47B6895B443318ECE0C98F0A61F3D96D208AAD6E519ABDF78E8D0E014F181E695332E9B6F23C8761CC54F0A470F"
+        }
+      },
+      "169B90D3B374E6008F097830364BFF1B44BF8C12D1009B0DC164700622E908F2": {
+        "confirmed": "true",
+        "block_account": "nano_1ghtjsz6jfqrn1axqxq4masamz73thc4ppyq7b8m9qrzqa5bfifa9q8oxhf3",
+        "balance": "30719750000000000000000000000000",
+        "subtype": "send",
+        "height": "7",
+        "contents": {
+          "type": "state",
+          "account": "nano_1ghtjsz6jfqrn1axqxq4masamz73thc4ppyq7b8m9qrzqa5bfifa9q8oxhf3",
+          "previous": "9519EA51BEA54990C187C19BF6E9FFE528CA074BB233BD83311F95756197781A",
+          "representative": "nano_1ghtjsz6jfqrn1axqxq4masamz73thc4ppyq7b8m9qrzqa5bfifa9q8oxhf3",
+          "balance": "30719750000000000000000000000000",
+          "link": "CC0D3BC7BB4C343EE3988F567EF046C88D5E95BE988680A17C86A5CB0347BA38",
+          "signature": "62C730A9209205105EF71F54B88F72ED7609E92EE1257AECC4A1304CCAD4CEDD46A773259835D60BE05DD0986FB34A485108FA673FF52F560E36CF0F52B53E0B"
+        }
+      },
+      "4C5EA73D554D4B50F79D0C2A32D59C8DE252BEE85F584CEF8846BB48F4431C6D": {
+        "confirmed": "true",
+        "block_account": "nano_3jhucph6mond4k31qcu3obr6q47x39uk4z6xok3yhdj8comjf8isj4ero1s5",
+        "balance": "2076350000000000000000000000000",
+        "subtype": "receive",
+        "height": "3",
+        "amount": "1000000000000000000000000000000",
+        "contents": {
+          "type": "state",
+          "account": "nano_3jhucph6mond4k31qcu3obr6q47x39uk4z6xok3yhdj8comjf8isj4ero1s5",
+          "previous": "8C9F2043C8245BA58B2EFD5C0197049A27F1A0946E161D6BF0FD028E278F7787",
+          "representative": "nano_3jhucph6mond4k31qcu3obr6q47x39uk4z6xok3yhdj8comjf8isj4ero1s5",
+          "balance": "2076350000000000000000000000000",
+          "link": "40E788B61DC493DB5D77A1986D34ABFEEB0AA7C953696F8C5B1E0DD5FD5FA6B5",
+          "signature": "7D6ADE2DD3455E4A273B5180793107B30EC260B1EE45F526A67AE1464FD9CB39FE7CACA4437EDD735C98A0910F2A2EB189DDDE77FEB8F496345BA549D664860D"
+        }
+      },
+      "8C9F2043C8245BA58B2EFD5C0197049A27F1A0946E161D6BF0FD028E278F7787": {
+        "confirmed": "true",
+        "block_account": "nano_3jhucph6mond4k31qcu3obr6q47x39uk4z6xok3yhdj8comjf8isj4ero1s5",
+        "balance": "1076350000000000000000000000000",
+        "subtype": "receive",
+        "height": "2",
+        "contents": {
+          "type": "state",
+          "account": "nano_3jhucph6mond4k31qcu3obr6q47x39uk4z6xok3yhdj8comjf8isj4ero1s5",
+          "previous": "ADFE0770D07206978B2C4F12E08A834D7A388C3B8A4F94EA5D25EA945447FA25",
+          "representative": "nano_3jhucph6mond4k31qcu3obr6q47x39uk4z6xok3yhdj8comjf8isj4ero1s5",
+          "balance": "1076350000000000000000000000000",
+          "link": "984FBC8B0123045E0AFB84FA2724C7979B44C5716653AC0EA31875FF58BF5EC6",
+          "signature": "2DEB91E2256D62F68DA0C91A07994447251F2D5AB7A926CBF8B4423AEBAF9A4960DF59A9FA50B21C9099CB57217AB52E898D3AB2C2FA0F9F47F99ED99AFA880E"
+        }
+      }
+    }
+  }
+}
