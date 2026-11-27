@@ -23,6 +23,8 @@ The script uses the saved [Hello World #4](../atto-receipt-offline/hello-world-4
 
 This rechecks only the three recorded credits. It does not rerun the history crawl or the two receipt probes, establish current key or chain status, or turn the two unknown payments into zeros. For a new observation instead, use the live instructions below.
 
+One of those receipt endpoints returned HTTP 200 on November 27, 2026. The [Hello World #3 offline replay](../atto-receipt-offline/#hello-world-3-a-receipt-that-became-publicly-readable) checks that credit separately; it does not change the November 24 observation or totals.
+
 ## Collect a fresh snapshot on Linux
 
 ### Check Atto node access before building

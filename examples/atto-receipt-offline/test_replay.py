@@ -10,6 +10,7 @@ import unittest
 HERE = Path(__file__).resolve().parent
 VERIFY = HERE.parent / 'atto-receipt' / 'verify.py'
 BUNDLE = HERE / 'llmrt-node-count.json'
+HELLO_WORLD_3 = HERE / 'hello-world-3.json'
 DENY_NETWORK = '''
 import runpy, sys
 
@@ -24,9 +25,9 @@ runpy.run_path(sys.argv[0], run_name='__main__')
 
 
 class ReplayTest(unittest.TestCase):
-    def replay(self, path):
+    def replay(self, path, case='llmrt-node-count'):
         return subprocess.run([sys.executable, '-c', DENY_NETWORK, str(VERIFY),
-                               '--case', 'llmrt-node-count', '--evidence-file', str(path), '--tamper-checks'],
+                               '--case', case, '--evidence-file', str(path), '--tamper-checks'],
                               capture_output=True, text=True, timeout=30)
 
     def check_bad_bundle(self, alter, message):
@@ -53,6 +54,28 @@ class ReplayTest(unittest.TestCase):
         self.assertEqual(proof['creditType'], 'OPEN')
         self.assertEqual(len(proof['tamperChecksRejected']), 8)
         self.assertFalse(proof['consensusIndependentlyVerified'])
+
+    def test_hello_world_3_credit_is_replayable_offline(self):
+        result = self.replay(HELLO_WORLD_3, 'hello-world-3')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stderr, '')
+        proof = json.loads(result.stdout)
+        self.assertEqual(proof['taskId'], 'c0976786-3c64-42ff-ad93-fcc9ec4245f8')
+        self.assertEqual(proof['evidenceMode'], 'offline')
+        self.assertEqual(proof['marketplaceSignature'], 'verified with pinned published key from offline evidence')
+        self.assertEqual(proof['senderDebitAtomic'], '1000000000000')
+        self.assertEqual(proof['recipientCreditAtomic'], proof['senderDebitAtomic'])
+        self.assertEqual(proof['creditType'], 'OPEN')
+        self.assertEqual(proof['creditHeight'], 1)
+        self.assertEqual(proof['nativeBlockHashesAndSignaturesVerified'], 3)
+        self.assertEqual(len(proof['tamperChecksRejected']), 8)
+
+    def test_other_saved_task_cannot_stand_in_for_hello_world_3(self):
+        result = self.replay(BUNDLE, 'hello-world-3')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(result.stdout, '')
+        self.assertIn('missing offline evidence', result.stderr)
+        self.assertNotIn('replay tried to use Python networking', result.stderr)
 
     def test_missing_native_response_does_not_fall_back(self):
         def remove_open(responses):
